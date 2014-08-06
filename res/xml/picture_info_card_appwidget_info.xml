@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+   Copyright 2014 Jason J.
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="@dimen/com_ovrhere_picwidget_minWidth"
+    android:minHeight="@dimen/com_ovrhere_picwidget_minHeight"
+    android:minResizeWidth="@dimen/com_ovrhere_picwidget_minResizeWidth"
+    android:minResizeHeight="@dimen/com_ovrhere_picwidget_minResizeHeight"
+    android:updatePeriodMillis="0"
+    android:initialLayout="@layout/pic_info_card_appwidget"
+    android:configure="com.ovrhere.android.pictureinfocard.widget.ui.PICWidgetConfigurationActivity" 
+    android:resizeMode="none" >
+</appwidget-provider>

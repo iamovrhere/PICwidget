@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+   Copyright 2014 Jason J.
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<resources>
+    <!-- Defines the colours for the project. Begrudgly using American spelling. -->
+    <eat-comment />
+    
+    <!-- The 'black' used for this app, at 80% opacity. -->
+    <color name="com_ovrhere_picwidget_black_80"
+        >#cc080808</color>
+    <!-- The 'white' used for this app. -->
+    <color name="com_ovrhere_picwidget_white" 
+        >#fdfdfd</color>
+    
+    <!-- The gradient black used in the background center. Black 80%. -->
+    <color name="com_ovrhere_picwidget_bg_center"
+        >@color/com_ovrhere_picwidget_black_80</color>
+    <!-- The gradient grey used in the background edges. Black 10% opacity. -->
+    <color name="com_ovrhere_picwidget_bg_edges" 
+        >#1A080808</color>
+    
+</resources>
