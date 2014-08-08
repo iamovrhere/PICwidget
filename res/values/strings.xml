@@ -43,7 +43,7 @@
         >Time display:</string> 
     
     <!-- List of options for the widget -->
-    <string-array name="com_ovrhere_picwidget_timeOptions">
+    <string-array name="com_ovrhere_picwidget_spinner_timeOptions">
         <item>None</item>
         <item>Analog</item>
     </string-array>
