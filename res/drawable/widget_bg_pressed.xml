@@ -14,17 +14,20 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<resources>
-	<!-- The name of the widget as it appears on the screen -->
-    <string name="app_name">Picture Info Widget</string>
-    <!-- The settings string -->
-    <string name="action_settings">Settings</string>
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle" >
+    <!-- Horizontal gradient -->
+    <gradient
+        android:angle="0"
+        android:centerX="0.5"
+        android:centerY="0.5"
+        
+        android:startColor="@color/com_ovrhere_picwidget_bg_pressed_edges"
+        android:centerColor="@color/com_ovrhere_picwidget_bg_pressed_center"
+        android:endColor="@color/com_ovrhere_picwidget_bg_pressed_edges"        
+        android:type="linear"
+         />
     
-    
-    <!-- The content description of the image. -->
-    <string name="com_ovrhere_picwidget_contentDescrip_mainPicture"
-        >A custom image set by the device owner</string>
-    <!--  The edit button string. -->
-    <string name="com_ovrhere_picwidget_button_edit">EDIT</string>
-     
-</resources>
+	<corners android:radius="@dimen/com_ovrhere_picwidget_widget_bg_radius" />
+</shape>

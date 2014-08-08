@@ -22,7 +22,12 @@
 
     <!-- See: https://developer.android.com/guide/practices/ui_guidelines/widget_design.html
     on widget cells->dp sizes.    -->
+    
+    <!-- Widget Outer limits dimentions -->
     <eat-comment />
+    
+    <!-- Widget background radius. -->
+    <dimen name="com_ovrhere_picwidget_widget_bg_radius">8dp</dimen>
     
     <!-- The minimum width for the pic info card widget: ~4 cells. -->
     <dimen name="com_ovrhere_picwidget_minWidth">250dp</dimen>
@@ -33,4 +38,12 @@
     <dimen name="com_ovrhere_picwidget_minResizeWidth">250dp</dimen>
     <!-- The min resize height for the pic info card  widget: ~1 cell -->
     <dimen name="com_ovrhere_picwidget_minResizeHeight">40dp</dimen>
+    
+    <!-- Widget internal -->
+    <eat-comment />
+    <!-- The square dimensions of the main picture of the widget. -->
+    <dimen name="com_ovrhere_picwidget_img_mainPicture_width">58dp</dimen>
+    
+
+    
 </resources>

@@ -14,17 +14,11 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<resources>
-	<!-- The name of the widget as it appears on the screen -->
-    <string name="app_name">Picture Info Widget</string>
-    <!-- The settings string -->
-    <string name="action_settings">Settings</string>
-    
-    
-    <!-- The content description of the image. -->
-    <string name="com_ovrhere_picwidget_contentDescrip_mainPicture"
-        >A custom image set by the device owner</string>
-    <!--  The edit button string. -->
-    <string name="com_ovrhere_picwidget_button_edit">EDIT</string>
-     
-</resources>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:drawable="@drawable/widget_bg_pressed" android:state_pressed="true" />
+    <item android:drawable="@drawable/widget_bg_focused"
+        android:state_focused="true"
+        android:state_enabled="true"
+        android:state_window_focused="true" />
+    <item android:drawable="@drawable/widget_bg" />
+</selector>

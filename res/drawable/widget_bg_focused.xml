@@ -17,6 +17,8 @@
 <shape
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle" >
+    <stroke android:width="8dp" 
+        	android:color="@color/com_ovrhere_picwidget_bg_focused_border"/>
     <!-- Horizontal gradient -->
     <gradient
         android:angle="0"
@@ -28,6 +30,5 @@
         android:endColor="@color/com_ovrhere_picwidget_bg_edges"        
         android:type="linear"
          />
-    
-	<corners android:radius="8dp" />
+    <corners android:radius="@dimen/com_ovrhere_picwidget_widget_bg_radius" />
 </shape>

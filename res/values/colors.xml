@@ -18,18 +18,43 @@
     <!-- Defines the colours for the project. Begrudgly using American spelling. -->
     <eat-comment />
     
+    <!-- The 'black' used for this app,. -->
+    <color name="com_ovrhere_picwidget_black"
+        >#080808</color>
     <!-- The 'black' used for this app, at 80% opacity. -->
     <color name="com_ovrhere_picwidget_black_80"
         >#cc080808</color>
     <!-- The 'white' used for this app. -->
     <color name="com_ovrhere_picwidget_white" 
         >#fdfdfd</color>
+    <!-- A faded 'white' for this app (at 60%) -->
+    <color name="com_ovrhere_picwidget_white_translucent" 
+        >#99fdfdfd</color>
     
+    <!-- The state color for being pressed. -->
+    <color name="com_ovrhere_android_pressed"
+        >#33b5e5</color>
+    
+    <!-- Widget colors -->
+    <eat-comment />
+        
     <!-- The gradient black used in the background center. Black 80%. -->
     <color name="com_ovrhere_picwidget_bg_center"
         >@color/com_ovrhere_picwidget_black_80</color>
     <!-- The gradient grey used in the background edges. Black 10% opacity. -->
     <color name="com_ovrhere_picwidget_bg_edges" 
         >#1A080808</color>
+    
+    <!-- The gradient color for pressed widget's center. -->
+    <color name="com_ovrhere_picwidget_bg_pressed_center"
+        >@color/com_ovrhere_android_pressed</color>
+     <!-- The gradient color for pressed widget's edge.
+     Set to the state color for being pressed at 80% opacity. -->
+    <color name="com_ovrhere_picwidget_bg_pressed_edges"
+        >#cc33b5e5</color>
+    
+    <!-- The border color for focus. -->
+    <color name="com_ovrhere_picwidget_bg_focused_border"
+        >@color/com_ovrhere_android_pressed</color>
     
 </resources>
