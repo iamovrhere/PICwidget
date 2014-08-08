@@ -26,5 +26,26 @@
         >A custom image set by the device owner</string>
     <!--  The edit button string. -->
     <string name="com_ovrhere_picwidget_button_edit">EDIT</string>
-     
+    
+    <!-- String to use for the select picture button -->
+    <string name="com_ovrhere_picwidget_button_selectPicture" 
+        >Set Picture</string>
+    <!-- String to use for remove picture button -->
+    <string name="com_ovrhere_picwidget_button_removePicture" 
+        >Remove Picture</string> 
+
+    <!-- Hint text to use for info box.-->
+    <string name="com_ovrhere_picwidget_textin_infoBox" 
+        >Owner information&#8230;</string> 
+        
+    <!-- String to use for time display options spinner label.-->
+    <string name="com_ovrhere_picwidget_text_timeOptions" 
+        >Time display:</string> 
+    
+    <!-- List of options for the widget -->
+    <string-array name="com_ovrhere_picwidget_timeOptions">
+        <item>None</item>
+        <item>Analog</item>
+    </string-array>
+
 </resources>
