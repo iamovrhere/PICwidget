@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Version 0.1.0  -->
+    <eat-comment />
+    <!-- The string used as the preference file name. -->
+    <string name="com_ovrhere_picwidget_PREFERENCE_FILE_KEY" >
+        com_ovrhere_picwidget_PREFERENCE_FILE_KEY
+    </string>
+        
+    <!-- Preference keys:
+	BE WARY OF CHANGING KEY VALUES HERE.  -->
+	<eat-comment />
+	<!-- Boolean key. Defines if a picture is set and, by extension, if there's 
+	a picture displayed. -->
+	<string name="com_ovrhere_picwidget_pref_KEY_DISPLAY_PICTURE"
+	    >com_ovrhere_picwidget_pref_KEY_DISPLAY_PICTURE</string>
+	
+	<!-- String key. Defines the content of the info box. 
+	This may migrate to database in future. Expects any string (please keep it under 500). -->
+	<string name="com_ovrhere_picwidget_pref_KEY_INFO_CONTENT"
+	    >com_ovrhere_picwidget_pref_KEY_INFO_CONTENT</string>	
+	    
+	<!-- String key. Defines how the time is displayed, if at all. 
+	Expects a preference value from: "VALUE_TIME_DISPLAY" -->
+	<string name="com_ovrhere_picwidget_pref_KEY_TIME_DISPLAY"
+	    >com_ovrhere_picwidget_pref_KEY_TIME_DISPLAY</string>
+	   
+    <!-- Preference Possible Values  -->
+	<eat-comment />	
+	<!-- String value. "None" value for key: com_ovrhere_picwidget_pref_KEY_TIME_DISPLAY.  -->
+	<string name="com_ovrhere_picwidget_pref_VALUE_TIME_DISPLAY_NONE">
+        com_ovrhere_picwidget_pref_VALUE_TIME_DISPLAY_NONE</string>
+    <!-- String value. "Analog" value for key: com_ovrhere_picwidget_pref_KEY_TIME_DISPLAY.  -->    
+    <string name="com_ovrhere_picwidget_pref_VALUE_TIME_DISPLAY_ANALOG">
+    	com_ovrhere_picwidget_pref_VALUE_TIME_DISPLAY_ANALOG</string>
+    	
+    <!-- Preference Default Values  -->
+	<eat-comment />	
+	<!-- String value. Default value for key: com_ovrhere_picwidget_pref_KEY_TIME_DISPLAY.  -->
+	<string name="com_ovrhere_picwidget_pref_DEF_VALUE_TIME_DISPLAY">
+        @string/com_ovrhere_picwidget_pref_VALUE_TIME_DISPLAY_NONE</string>
+        
+	<!-- String value. Default value for key: com_ovrhere_picwidget_pref_KEY_INFO_CONTENT.  -->
+	<string name="com_ovrhere_picwidget_pref_DEF_VALUE_INFO_CONTENT"></string>
+	
+	<!-- Boolean key. Default value for key:com_ovrhere_picwidget_pref_KEY_DISPLAY_PICTURE. -->
+	<item name="com_ovrhere_picwidget_pref_DEF_VALUE_DISPLAY_PICTURE"
+	   format="boolean|integer" type="bool" >0</item>
+	
+</resources>
