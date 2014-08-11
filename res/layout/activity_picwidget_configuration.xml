@@ -44,8 +44,8 @@
 	        
 	        android:hint="@string/com_ovrhere_picwidget_textin_infoBox"
 	        
-	        android:maxLines="5"
-	        android:maxLength="160"
+	        android:maxLines="@integer/com_ovrhere_picwidget_activity_config_textin_info_lineLimit"
+	        android:maxLength="@integer/com_ovrhere_picwidget_activity_config_textin_info_charLimit"
 	        >
 	
 	        <requestFocus />

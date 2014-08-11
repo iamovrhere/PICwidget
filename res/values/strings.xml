@@ -29,10 +29,10 @@
     
     <!-- String to use for the select picture button -->
     <string name="com_ovrhere_picwidget_button_selectPicture" 
-        >Set Picture</string>
+        >Select Picture</string>
     <!-- String to use for remove picture button -->
     <string name="com_ovrhere_picwidget_button_removePicture" 
-        >Remove Picture</string> 
+        >Clear Picture</string> 
 
     <!-- Hint text to use for info box.-->
     <string name="com_ovrhere_picwidget_textin_infoBox" 
