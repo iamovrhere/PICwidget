@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+   Copyright 2014 Jason J.
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<resources>
+    <!-- The input character limit for the info text. -->
+    <item name="com_ovrhere_picwidget_activity_config_textin_info_charLimit" 
+        type="integer">120</item>
+    <!-- The input line limit for the info text. -->
+    <item name="com_ovrhere_picwidget_activity_config_textin_info_lineLimit" 
+        type="integer">5</item>
+    
+    <!-- The output line limit for the info text. -->
+    <item name="com_ovrhere_picwidget_widget_text_mainText_lineLimit" 
+        type="integer">4</item>
+    
+    <!-- The estimated widget character limit per line minimally 
+    (picture + time enabled). -->
+    <item name="com_ovhere_picwidget_widget_infoText_charPerLine_min" 
+       type="integer">15</item>
+    <!-- The estimated widget character limit per line middle value 
+    (picture enabled only). -->
+    <item name="com_ovhere_picwidget_widget_infoText_charPerLine_mid" 
+       type="integer">25</item>
+    <!-- The estimated widget character limit per line max value 
+    (text only). -->
+    <item name="com_ovhere_picwidget_widget_infoText_charPerLine_max" 
+       type="integer">35</item>
+    
+</resources>
