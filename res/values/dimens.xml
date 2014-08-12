@@ -42,18 +42,18 @@
     <!-- Widget internal -->
     <eat-comment />
     <!-- The square dimensions of the main picture of the widget. -->
-    <dimen name="com_ovrhere_picwidget_widget_img_mainPicture_width">58dp</dimen>
+    <dimen name="com_ovrhere_picwidget_widget_img_mainPicture_width">52dp</dimen>
     <!-- The clock frame width -->
-    <dimen name="com_ovrhere_picwidget_widget_frame_clockWidth">80dp</dimen>
+    <dimen name="com_ovrhere_picwidget_widget_frame_clockWidth">72dp</dimen>
     
     <!-- The side padding for the internal widget. -->
-    <dimen name="com_ovrhere_picwidget_widget_layout_sidePadding">5dp</dimen>    
+    <dimen name="com_ovrhere_picwidget_widget_layout_sidePadding">4dp</dimen>    
     <!-- The primary item padding for elements in the widget -->
-    <dimen name="com_ovrhere_picwidget_widget_item_padding">8dp</dimen>
+    <dimen name="com_ovrhere_picwidget_widget_item_padding">4dp</dimen>
     
 	<!-- The text size for the pic widget info. 
 	Dp is used INTENTIONALLY as this is a widget; we need a constant size.
 	Alternative sizes will need to supplied with dropdown eventually. -->
-    <dimen name="com_ovrhere_picwidget_widget_text_info_size">14dp</dimen>
+    <dimen name="com_ovrhere_picwidget_widget_text_info_size">13dp</dimen>
     
 </resources>
