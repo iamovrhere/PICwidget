@@ -20,6 +20,7 @@ import java.util.Arrays;
 
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -35,17 +36,19 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RemoteViews;
 import android.widget.Spinner;
 
 import com.ovrhere.android.pictureinfocard.widget.R;
 import com.ovrhere.android.pictureinfocard.widget.prefs.PreferenceUtils;
+import com.ovrhere.android.pictureinfocard.widget.provider.PictureInfoCardWidgetProvider;
 
 /**
  * The configuration Activity (derived from MainActivity) in progress.
  * (To be) Used to configure the widget at launch and otherwise.
  *  
  * @author Jason J.
- * @version 0.2.0-20140806
+ * @version 0.3.0-20140812
  */
 public class PICWidgetConfigurationActivity extends Activity 
 implements OnClickListener, OnFocusChangeListener {
@@ -67,6 +70,9 @@ implements OnClickListener, OnFocusChangeListener {
 	/** Bundle key. The current index of the key selected. Int */
 	final static private String KEY_TIME_DISPLAY_CHOICE = 
 			CLASS_NAME + ".KEY_DISPLAY_TIME";
+	/** Bundle key. The current #isFirstRun value. Boolean. */
+	final static private String KEY_FIRST_RUN = 
+			CLASS_NAME + ".KEY_FIRST_RUN";
 	
 	/** The request id for the image picker. */
 	final static private int REQUEST_IMAGE_PICKER_SELECT = 0x123;
@@ -81,6 +87,8 @@ implements OnClickListener, OnFocusChangeListener {
 	private EditText et_infoText = null;
 	/** The spinner to determine how to display time. */
 	private Spinner sp_timeDisplay = null;
+	/** The value for whether is the first run. */
+	private boolean isFirstRun = false;
 	
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {	
@@ -88,6 +96,7 @@ implements OnClickListener, OnFocusChangeListener {
 		outState.putInt(KEY_APP_WIDGET_ID, mAppWidgetId);
 		outState.putString(KEY_INFO_TEXT, et_infoText.getText().toString());
 		outState.putInt(KEY_TIME_DISPLAY_CHOICE, sp_timeDisplay.getSelectedItemPosition());
+		outState.putBoolean(KEY_FIRST_RUN, isFirstRun);
 	}
 	
 	@Override
@@ -106,6 +115,7 @@ implements OnClickListener, OnFocusChangeListener {
 			int pos = savedInstanceState.getInt(KEY_TIME_DISPLAY_CHOICE);
 			sp_timeDisplay.setSelection( 
 					(pos < 0 || pos >= sp_timeDisplay.getCount()) ? 0 : pos );
+			isFirstRun = savedInstanceState.getBoolean(KEY_FIRST_RUN);
 		} 
 		
 		if (mAppWidgetId < 0) {
@@ -155,6 +165,7 @@ implements OnClickListener, OnFocusChangeListener {
 		et_infoText = (EditText) 
 				findViewById(R.id.com_ovrhere_picwidget_activity_config_textin_info);
 		et_infoText.setOnFocusChangeListener(this);
+		//TODO set maximum lines for edit text
 	
 		sp_timeDisplay = (Spinner)
 				findViewById(R.id.com_ovrhere_picwidget_activity_config_spinner_clockChoice);
@@ -183,7 +194,8 @@ implements OnClickListener, OnFocusChangeListener {
 	 * If set, set's view's to their content. Requires view be set
 	 * @see initViews */
 	private void checkPreferences(){
-		if(PreferenceUtils.isFirstRun(this, mAppWidgetId)){
+		isFirstRun = PreferenceUtils.isFirstRun(this, mAppWidgetId);
+		if(isFirstRun){
 			PreferenceUtils.setToDefault(this, mAppWidgetId);
 		}
 		SharedPreferences prefs = PreferenceUtils.getPreferences(this, mAppWidgetId);
@@ -267,6 +279,30 @@ implements OnClickListener, OnFocusChangeListener {
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
 	}
+	
+	/** Notifies the widget(s) the the preferences have been updated. */
+	private void updateWidgets() {
+		AppWidgetManager widgetManager = AppWidgetManager.getInstance(this);
+		ComponentName widgetComponent = new ComponentName(this, PictureInfoCardWidgetProvider.class);
+		int[] widgetIds = widgetManager.getAppWidgetIds(widgetComponent);
+		Intent update = new Intent();
+		update.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetIds);
+		update.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+		update.setClass(this, PictureInfoCardWidgetProvider.class);
+		sendBroadcast(update);
+	}
+	/** Sets up the widget for the first time. */
+	private void setUpWidget() {
+		AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+		RemoteViews views = new RemoteViews(this.getPackageName(),
+									R.layout.pic_info_card_appwidget);
+		appWidgetManager.updateAppWidget(mAppWidgetId, views);
+		
+		Intent resultValue = new Intent();
+		resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+		setResult(RESULT_OK, resultValue);
+	}
+	
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	/// Implemented Listeners
 	////////////////////////////////////////////////////////////////////////////////////////////////
@@ -286,10 +322,12 @@ implements OnClickListener, OnFocusChangeListener {
 		switch (v.getId()){
 		case R.id.com_ovrhere_picwidget_activity_config_button_confirm:
 			collectAndSet();
-			//final step
-			Intent resultValue = new Intent();
-			resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
-			setResult(RESULT_OK, resultValue);
+			//final step	
+			if (isFirstRun){
+				setUpWidget();
+			} else {
+				updateWidgets();
+			}
 			finish();
 			break;
 		case R.id.com_ovrhere_picwidget_activity_config_button_cancel:
@@ -308,4 +346,5 @@ implements OnClickListener, OnFocusChangeListener {
 			//nothing here
 		}
 	}
+	
 }

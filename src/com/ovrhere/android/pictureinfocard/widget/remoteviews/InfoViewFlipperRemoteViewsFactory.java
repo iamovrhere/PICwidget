@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService.RemoteViewsFactory;
 
@@ -176,7 +177,7 @@ public class InfoViewFlipperRemoteViewsFactory implements RemoteViewsFactory {
 		while (fullInfoText.length() > 0){
 			String currBlock = "";
 			int currBlockLimit = blockLimit;
-			
+			Log.d(CLASS_NAME, "index:"+mInfoText.size());
 			
 			while (fullInfoText.contains("\n") && currBlockLimit > 0){
 				int indentIndex_plus = fullInfoText.indexOf("\n") + 1;
@@ -205,7 +206,7 @@ public class InfoViewFlipperRemoteViewsFactory implements RemoteViewsFactory {
 			}
 			//add block to list.
 			mInfoText.add(currBlock);
-			
+			Log.d(CLASS_NAME, "content: [["+currBlock+"]]");
 		}
 		return;
 	}
