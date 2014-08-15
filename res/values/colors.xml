@@ -30,6 +30,9 @@
     <!-- A faded 'white' for this app (at 60%) -->
     <color name="com_ovrhere_picwidget_white_translucent" 
         >#99fdfdfd</color>
+    <!-- A faded grey text for this app (at 80%) -->
+    <color name="com_ovrhere_picwidget_grey_translucent" 
+        >#ccdcdcdc</color>
     
     <!-- The state color for being pressed. -->
     <color name="com_ovrhere_android_pressed"

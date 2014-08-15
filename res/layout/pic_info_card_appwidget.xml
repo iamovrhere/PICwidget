@@ -54,43 +54,61 @@
         <TextView
             android:id="@+id/com_ovrhere_picwidget_widget_button_edit"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:layout_below="@id/com_ovrhere_picwidget_widget_img_mainPicture"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="-2dp"
-            android:text="@string/com_ovrhere_picwidget_button_edit"
+            android:text="@string/com_ovrhere_picwidget_text_edit"
             android:textColor="@color/com_ovrhere_picwidget_white_translucent"
             android:textSize="10sp"
             tools:ignore="SmallSp" />
 
     </RelativeLayout>
 
-    
-    <!-- <AdapterViewFlipper 
-        android:id="@+id/com_ovrhere_picwidget_widget_viewAnimator_mainText"
-        
-        android:autoStart="true"
-        android:flipInterval="5000"
-        android:inAnimation="@android:anim/cycle_interpolator"
-        android:outAnimation="@android:anim/fade_out"
-        android:loopViews="true"
-        android:layoutAnimation="@android:anim/fade_in"
-        
+    <RelativeLayout 
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:layout_gravity="center_vertical"
         
-        android:layout_weight="1"
         android:padding="@dimen/com_ovrhere_picwidget_widget_item_padding"
-        /> -->
-        <!-- Test set of 160 characters, 
-        we use dp as it is a widget who needs constant size:
-        At 14dp: 
-        	-pic + clock enabled ==> 16 char per line
-        	-pic + clock disabled ==> 27 char per line
-        	-pic gone + clock enabled ==> 26 char per line
-        	-pic gone + clock disabled ==> 37 char per line
-         -->
+        >
+    <AdapterViewFlipper 
+        android:id="@+id/com_ovrhere_picwidget_widget_viewAnimator_infoText"
+        
+        android:autoStart="true"
+        android:loopViews="true"
+        android:flipInterval="@integer/com_ovrhere_picwidget_widget_viewAdapter_switchTime"
+        
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        
+        android:layout_gravity="center_vertical"
+    	android:gravity="center_vertical"
+    
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        
+        /> 
+        
+         <TextView
+            android:id="@+id/com_ovrhere_picwidget_widget_text_noText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            
+            android:layout_centerHorizontal="true"
+        	android:layout_centerVertical="true"
+                        
+            android:text="@string/com_ovrhere_picwidget_text_noStringSet"
+            android:textColor="@color/com_ovrhere_picwidget_white_translucent"
+            
+            android:textStyle="bold"            
+            style="@android:style/TextAppearance.Medium"
+            
+            /> 
+         
+        <!-- 
+        160 chars 
         <TextView
             android:id="@+id/com_ovrhere_picwidget_widget_text_mainText"
             android:layout_width="0dp"
@@ -104,8 +122,9 @@
             android:text="1234567890abcdefghij1234567890abcdefghij1234567890abcdefghij1234567890abcdefghij1234567890abcdefghij1234567890abcdefghij1234567890abcdefghij1234567890abcdefghij"
             android:textColor="@color/com_ovrhere_picwidget_white"
             android:textSize="@dimen/com_ovrhere_picwidget_widget_text_info_size"
-            tools:ignore="HardcodedText" />
-        
+            tools:ignore="HardcodedText" /> -->
+     </RelativeLayout>
+     
     <FrameLayout
         android:id="@+id/com_ovrhere_picwidget_widget_frame_clock"
         android:layout_width="@dimen/com_ovrhere_picwidget_widget_frame_clockWidth"

@@ -24,8 +24,12 @@
     <!-- The content description of the image. -->
     <string name="com_ovrhere_picwidget_contentDescrip_mainPicture"
         >A custom image set by the device owner</string>
-    <!--  The edit button string. -->
-    <string name="com_ovrhere_picwidget_button_edit">EDIT</string>
+    <!--  The edit textview string. -->
+    <string name="com_ovrhere_picwidget_text_edit">EDIT</string>    
+    <!--  The Call textview string. -->
+    <string name="com_ovrhere_picwidget_text_call">CALL</string>    
+    <!--  The textview string for no string set. -->
+    <string name="com_ovrhere_picwidget_text_noStringSet">No text set</string>
     
     <!-- String to use for the select picture button -->
     <string name="com_ovrhere_picwidget_button_selectPicture" 
