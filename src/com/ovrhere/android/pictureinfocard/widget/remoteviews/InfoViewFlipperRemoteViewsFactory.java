@@ -33,7 +33,7 @@ import com.ovrhere.android.pictureinfocard.widget.utils.TextClipper;
 /**
  * The factory to produce remote views for the information view text.
  * @author Jason J.
- * @version 0.1.2-20140813
+ * @version 0.2.0-20140815
  */
 public class InfoViewFlipperRemoteViewsFactory implements RemoteViewsFactory {
 	/** Class name for debugging purposes. */
@@ -89,7 +89,7 @@ public class InfoViewFlipperRemoteViewsFactory implements RemoteViewsFactory {
 			rv.setTextViewText(R.id.com_ovrhere_picwidget_infotext_text, info);
 			
 			return rv;
-		}
+		} 
 		return null;
 	}
 
@@ -137,6 +137,9 @@ public class InfoViewFlipperRemoteViewsFactory implements RemoteViewsFactory {
 						"");
 		
 		clipInfoText(pictureDisplayed, timeDisplayed, fullInfoText);
+		if (mInfoText.isEmpty()){
+			mInfoText.add(""); //add one empty element.
+		}
 	}
 	
 	/**
@@ -168,59 +171,5 @@ public class InfoViewFlipperRemoteViewsFactory implements RemoteViewsFactory {
 				lineWidth, maxLines);
 		
 	}
-	
-
-	/**
-	 * Splits the text into blocks based upon indents, spaces and tabs.
-	 * @param fullInfoText The text to split.
-	 * @param charPerLine The character limit per line of each block
-	 * @param blockLimit The character limit of each block
-	 */
-	@Deprecated
-	private void splitInfoText(String fullInfoText, int charPerLine,
-			int blockLimit) {
-		while (fullInfoText.length() > 0){
-			String currBlock = "";
-			int currBlockLimit = blockLimit;
-			
-			while (fullInfoText.contains("\n") && currBlockLimit > 0){
-				int indentIndex_plus = fullInfoText.indexOf("\n") + 1;
-				
-				if (indentIndex_plus > currBlockLimit){
-					//we have no assurance that we won't clip a word incorrectly.
-					break; 
-				}
-				//add the string, including indent.
-				currBlock +=  fullInfoText.substring(0, indentIndex_plus);
-				fullInfoText = fullInfoText.substring(indentIndex_plus);
-				currBlockLimit -= charPerLine; //new line, so remove 1 line
-			}
-			
-						
-			if (fullInfoText.length() <= currBlockLimit){
-				//the remaining string will fit.
-				currBlock += fullInfoText;
-				fullInfoText = "";
-				
-			} else if (currBlockLimit > 0){ //no new lines remaining 
-				String potentialString = fullInfoText.substring(0, currBlockLimit +1);
-				
-				//check one past the limit, find last space or tab.				
-				if (potentialString.lastIndexOf(" ") > 0){
-					currBlockLimit = potentialString.lastIndexOf(" ");
-				} else if (potentialString.lastIndexOf("\t") > 0){
-					currBlockLimit = potentialString.lastIndexOf("\t");
-				} 
-				//if the block is empty, or there are spaces
-				if (currBlock.isEmpty() || currBlockLimit + 1 < potentialString.length()){
-					//add the string
-					currBlock += fullInfoText.substring(0, currBlockLimit);
-					fullInfoText = fullInfoText.substring(currBlockLimit);	
-				}				
-			}
-			//add block to list.
-			mInfoText.add(currBlock.trim());
-		}
-		return;
-	}
+		
 }

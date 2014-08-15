@@ -91,38 +91,20 @@
         
         /> 
         
-         <TextView
-            android:id="@+id/com_ovrhere_picwidget_widget_text_noText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            
-            android:layout_centerHorizontal="true"
-        	android:layout_centerVertical="true"
-                        
-            android:text="@string/com_ovrhere_picwidget_text_noStringSet"
-            android:textColor="@color/com_ovrhere_picwidget_white_translucent"
-            
-            android:textStyle="bold"            
-            style="@android:style/TextAppearance.Medium"
-            
-            /> 
-         
-        <!-- 
-        160 chars 
-        <TextView
-            android:id="@+id/com_ovrhere_picwidget_widget_text_mainText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+         <ProgressBar
+             android:id="@+id/com_ovrhere_picwidget_widget_progress_noText"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             
             android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:maxLines="@integer/com_ovrhere_picwidget_widget_text_mainText_lineLimit"
-            
-            android:padding="@dimen/com_ovrhere_picwidget_widget_item_padding"
-        
-            android:text="1234567890abcdefghij1234567890abcdefghij1234567890abcdefghij1234567890abcdefghij1234567890abcdefghij1234567890abcdefghij1234567890abcdefghij1234567890abcdefghij"
-            android:textColor="@color/com_ovrhere_picwidget_white"
-            android:textSize="@dimen/com_ovrhere_picwidget_widget_text_info_size"
-            tools:ignore="HardcodedText" /> -->
+	    	android:gravity="center_vertical"
+	    
+	        android:layout_centerHorizontal="true"
+	        android:layout_centerVertical="true"
+	        
+	        style="?android:attr/progressBarStyleSmall"
+         />
+
      </RelativeLayout>
      
     <FrameLayout
