@@ -20,7 +20,7 @@
     android:minResizeWidth="@dimen/com_ovrhere_picwidget_minResizeWidth"
     android:minResizeHeight="@dimen/com_ovrhere_picwidget_minResizeHeight"
     android:updatePeriodMillis="0"
-    android:initialLayout="@layout/pic_info_card_appwidget"
+    android:initialLayout="@layout/appwidget_loading_widget"
     android:configure="com.ovrhere.android.pictureinfocard.widget.ui.PICWidgetConfigurationActivity" 
     android:resizeMode="none" >
 </appwidget-provider>
