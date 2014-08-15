@@ -31,6 +31,7 @@
     <!--  The textview string for no string set. -->
     <string name="com_ovrhere_picwidget_text_noStringSet">No text set</string>
     
+    
     <!-- String to use for the select picture button -->
     <string name="com_ovrhere_picwidget_button_selectPicture" 
         >Select Picture</string>
@@ -52,4 +53,8 @@
         <item>Analog</item>
     </string-array>
 
+    <!-- The stub to use in combination with appwdigetid to name image
+    files. -->
+    <string name="com_ovrhere_picwidget_filename_imgStub"
+        >picwidget_picture_id</string>
 </resources>

@@ -31,7 +31,7 @@ import android.util.Log;
 
 /** File utility for copying and viewing files.
  * @author Jason J.
- * @version 0.1.0-20140814
+ * @version 0.2.0-20140815
  */
 public class FileUtil {
 	/** Class name for debugging purposes. */
@@ -44,7 +44,7 @@ public class FileUtil {
 	 * @param context The current context
 	 * @param sourcePath The source file to copy.
 	 * @param destName The destination name to use. 
-	 * @return <code>true</code> for sucess, <code>false</code> for failure.
+	 * @return <code>true</code> for success, <code>false</code> for failure.
 	 */
 	public static boolean copyFileToInternal(Context context, 
 			String sourcePath, String destName){
@@ -93,6 +93,15 @@ public class FileUtil {
 			}
 		}
 		return null;
+	}
+	/** Deletes the file from internal. Convience function for 
+	 * {@link Context#deleteFile(String)}.
+	 * @param context The current context.
+	 * @param fileName The file to delete
+	 * @return <code>true</code> if sucessfully deleted, <code>false</code> otherwise.
+	 */
+	public static boolean deleteFromInternal(Context context, String fileName){
+		return context.deleteFile(fileName);
 	}
 	
 	//TODO define more graceful behaviour

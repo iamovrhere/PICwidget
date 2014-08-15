@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,19 +37,21 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RemoteViews;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.ovrhere.android.pictureinfocard.widget.R;
 import com.ovrhere.android.pictureinfocard.widget.prefs.PreferenceUtils;
 import com.ovrhere.android.pictureinfocard.widget.provider.PictureInfoCardWidgetProvider;
+import com.ovrhere.android.pictureinfocard.widget.utils.FileUtil;
+import com.ovrhere.android.pictureinfocard.widget.utils.ImagePickerUtil;
 
 /**
  * The configuration Activity (derived from MainActivity) in progress.
  * (To be) Used to configure the widget at launch and otherwise.
  *  
  * @author Jason J.
- * @version 0.3.0-20140812
+ * @version 0.4.0-20140815
  */
 public class PICWidgetConfigurationActivity extends Activity 
 implements OnClickListener, OnFocusChangeListener {
@@ -73,6 +76,13 @@ implements OnClickListener, OnFocusChangeListener {
 	/** Bundle key. The current #isFirstRun value. Boolean. */
 	final static private String KEY_FIRST_RUN = 
 			CLASS_NAME + ".KEY_FIRST_RUN";
+	/** Bundle key. The current {@link #isPictureSet} value. Boolean. */
+	final static private String KEY_PICTURE_SET = 
+			CLASS_NAME + ".KEY_PICTURE_SET";
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	/// End bundle keys
+	////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/** The request id for the image picker. */
 	final static private int REQUEST_IMAGE_PICKER_SELECT = 0x123;
@@ -83,12 +93,21 @@ implements OnClickListener, OnFocusChangeListener {
 	/** The app widget id for accessing views. */
 	private int mAppWidgetId = -1; 
 	
+	/** The display image being previewed. */
+	private ImageView displayImage = null;
 	/** The info text input. */
 	private EditText et_infoText = null;
 	/** The spinner to determine how to display time. */
 	private Spinner sp_timeDisplay = null;
+	/** The button to remove the current picture. */
+	private Button btn_remove = null;
+	
 	/** The value for whether is the first run. */
 	private boolean isFirstRun = false;
+	/** Whether or not the picture is set. */
+	private boolean isPictureSet = false;
+	/** The name to give the display picture. */
+	private String displayImageName = "";
 	
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {	
@@ -97,6 +116,7 @@ implements OnClickListener, OnFocusChangeListener {
 		outState.putString(KEY_INFO_TEXT, et_infoText.getText().toString());
 		outState.putInt(KEY_TIME_DISPLAY_CHOICE, sp_timeDisplay.getSelectedItemPosition());
 		outState.putBoolean(KEY_FIRST_RUN, isFirstRun);
+		outState.putBoolean(KEY_PICTURE_SET, isPictureSet);
 	}
 	
 	@Override
@@ -116,6 +136,7 @@ implements OnClickListener, OnFocusChangeListener {
 			sp_timeDisplay.setSelection( 
 					(pos < 0 || pos >= sp_timeDisplay.getCount()) ? 0 : pos );
 			isFirstRun = savedInstanceState.getBoolean(KEY_FIRST_RUN);
+			isPictureSet = savedInstanceState.getBoolean(KEY_PICTURE_SET);			
 		} 
 		
 		if (mAppWidgetId < 0) {
@@ -127,6 +148,10 @@ implements OnClickListener, OnFocusChangeListener {
 			            AppWidgetManager.INVALID_APPWIDGET_ID);
 			}
 		}
+		displayImageName =
+				getResources().getString(R.string.com_ovrhere_picwidget_filename_imgStub) + 
+				mAppWidgetId;
+		
 		checkPreferences();
 		
 		//TODO finish the settings & configuring view		
@@ -135,7 +160,19 @@ implements OnClickListener, OnFocusChangeListener {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == REQUEST_IMAGE_PICKER_SELECT && 
+			resultCode == Activity.RESULT_OK){  
+			String sourcePath = ImagePickerUtil.getPathFromCameraData(this, data);
+			if (FileUtil.copyFileToInternal(this, sourcePath, displayImageName)){
+				isPictureSet = true;
+				setDisplayImage();
+			} else {
+				isPictureSet = false;
+			}
+		}
+		
 	}
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -167,6 +204,12 @@ implements OnClickListener, OnFocusChangeListener {
 		et_infoText.setOnFocusChangeListener(this);
 		//TODO set maximum lines for edit text
 	
+		displayImage = (ImageView) 
+				findViewById(R.id.com_ovrhere_picwidget_activity_config_img_preview);
+		initSpinner();
+	}
+	/** Initializes the spinner. */
+	private void initSpinner() {
 		sp_timeDisplay = (Spinner)
 				findViewById(R.id.com_ovrhere_picwidget_activity_config_spinner_clockChoice);
 		ArrayList<String> choices = 
@@ -187,8 +230,9 @@ implements OnClickListener, OnFocusChangeListener {
 			.setOnClickListener(this);
 		((Button) findViewById(R.id.com_ovrhere_picwidget_activity_config_button_selectPicture))
 			.setOnClickListener(this);
-		((Button) findViewById(R.id.com_ovrhere_picwidget_activity_config_button_removePicture))
-			.setOnClickListener(this);
+		btn_remove = (Button) 
+				findViewById(R.id.com_ovrhere_picwidget_activity_config_button_removePicture);
+		btn_remove.setOnClickListener(this);
 	}
 	/** Checks to see if preferences are set. If not, sets them. 
 	 * If set, set's view's to their content. Requires view be set
@@ -200,12 +244,37 @@ implements OnClickListener, OnFocusChangeListener {
 		}
 		SharedPreferences prefs = PreferenceUtils.getPreferences(this, mAppWidgetId);
 		
+		setDisplayPicture(prefs);
 		setInfoText(prefs);
 		setTimeDisplaySpinner(prefs);
+	}
+	/** Sets the display picture enviroment based upon preference.
+	 * @param prefs The preference to check.
+	 */
+	private void setDisplayPicture(SharedPreferences prefs) {
+		Resources r = getResources();
+		isPictureSet = prefs.getBoolean(
+				r.getString(R.string.com_ovrhere_picwidget_pref_KEY_DISPLAY_PICTURE),
+				r.getBoolean(R.bool.com_ovrhere_picwidget_pref_DEF_VALUE_DISPLAY_PICTURE));
+		setDisplayImage();
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	/// Helper functions
 	////////////////////////////////////////////////////////////////////////////////////////////////
+	/**
+	 * Set's picture display based on existing file & the accompanying button.
+	 */
+	private void setDisplayImage() {
+		Bitmap bitmap = FileUtil.readBitmapFromInternal(this, displayImageName);
+		boolean imgExists = bitmap != null;
+		if (imgExists){
+			displayImage.setImageBitmap(bitmap);
+		}
+		if (btn_remove != null){
+			btn_remove.setEnabled(imgExists);
+		} 
+	}
+	
 	/** Sets the info text based on preferences. 
 	 * @param prefs The preference reference to use.
 	 */
@@ -242,7 +311,9 @@ implements OnClickListener, OnFocusChangeListener {
 		
 		editor.putString(
 				r.getString(R.string.com_ovrhere_picwidget_pref_KEY_INFO_CONTENT),
-				et_infoText.getText().toString()
+				et_infoText.getText()	.toString()
+										.trim()
+										//.replace("\n", "")
 				);
 		setTimeDisplayPreference(editor);
 		
@@ -267,12 +338,15 @@ implements OnClickListener, OnFocusChangeListener {
 		editor.putString(
 				r.getString(R.string.com_ovrhere_picwidget_pref_KEY_TIME_DISPLAY), 
 				r.getString(selection));
+		editor.putBoolean(
+				r.getString(R.string.com_ovrhere_picwidget_pref_KEY_DISPLAY_PICTURE),
+				isPictureSet
+				);
 	}
 	
 	/** Launchers image picker with {@link #REQUEST_IMAGE_PICKER_SELECT}. */
 	private void launchImagePicker(){
-		Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI); 
-		startActivityForResult(i, REQUEST_IMAGE_PICKER_SELECT);		
+		ImagePickerUtil.launchPicker(this, REQUEST_IMAGE_PICKER_SELECT);	
 	}
 	/** Hides the keyboard. */
 	private void hideKeyboard(View v){
@@ -284,20 +358,21 @@ implements OnClickListener, OnFocusChangeListener {
 	private void updateWidgets() {
 		AppWidgetManager widgetManager = AppWidgetManager.getInstance(this);
 		ComponentName widgetComponent = new ComponentName(this, PictureInfoCardWidgetProvider.class);
+		
 		int[] widgetIds = widgetManager.getAppWidgetIds(widgetComponent);
 		Intent update = new Intent();
 		update.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetIds);
 		update.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
 		update.setClass(this, PictureInfoCardWidgetProvider.class);
+		
+		widgetManager.notifyAppWidgetViewDataChanged(
+        		mAppWidgetId, 
+        		R.id.com_ovrhere_picwidget_widget_viewAnimator_infoText);
+		
 		sendBroadcast(update);
 	}
 	/** Sets up the widget for the first time. */
 	private void setUpWidget() {
-		AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-		RemoteViews views = new RemoteViews(this.getPackageName(),
-									R.layout.pic_info_card_appwidget);
-		appWidgetManager.updateAppWidget(mAppWidgetId, views);
-		
 		Intent resultValue = new Intent();
 		resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
 		setResult(RESULT_OK, resultValue);
@@ -340,7 +415,12 @@ implements OnClickListener, OnFocusChangeListener {
 			//TODO handle results
 			break;
 		case R.id.com_ovrhere_picwidget_activity_config_button_removePicture:
-			
+			isPictureSet = false;
+			displayImage.setImageDrawable(
+					getResources().getDrawable(R.drawable.ic_no_picture)
+					);
+			FileUtil.deleteFromInternal(this, displayImageName);
+			btn_remove.setEnabled(false);
 			break;
 		default:
 			//nothing here
