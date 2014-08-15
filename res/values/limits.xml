@@ -23,28 +23,28 @@
         type="integer">5</item>
     
     <!-- The output line limit for the info text. -->
-    <item name="com_ovrhere_picwidget_widget_text_mainText_lineLimit" 
-        type="integer">4</item>
+    <item name="com_ovrhere_picwidget_widget_infotext_lineLimit" 
+        type="integer">3</item>
+     <!-- The output line limit for the info text. -->
+    <item name="com_ovrhere_picwidget_factory_infotext_lineLimit" 
+        type="integer">3</item>
+    
+     <!-- The time for the view adapter flipper to flip. 6.5 s -->
+    <item name="com_ovrhere_picwidget_widget_viewAdapter_switchTime" 
+        type="integer">6500</item>
     
     
-    <!-- Use a test set of 160 characters, and a 13 dp: 
-        	-pic + clock enabled ==> 23 char per line
-        	-pic + clock disabled ==> 32 char per line
-        	-pic gone + clock enabled ==> 31 char per line
-        	-pic gone + clock disabled ==> 42 char per line
-         -->
-     <eat-comment />
-    <!-- The estimated widget character limit per line minimally 
+    <!-- The estimated widget text width per line minimally 
     (picture + time enabled). -->
-    <item name="com_ovhere_picwidget_widget_infoText_charPerLine_min" 
-       type="integer">22</item>
-    <!-- The estimated widget character limit per line middle value 
+    <dimen name="com_ovhere_picwidget_widget_infoText_width_min" 
+       >150dp</dimen>
+    <!-- The estimated widget text width per line middle value 
     (picture enabled only). -->
-    <item name="com_ovhere_picwidget_widget_infoText_charPerLine_mid" 
-       type="integer">30</item>
-    <!-- The estimated widget character limit per line max value 
+    <dimen name="com_ovhere_picwidget_widget_infoText_width_mid" 
+       >200dp</dimen>
+    <!-- The estimated widget text width per line max value 
     (text only). -->
-    <item name="com_ovhere_picwidget_widget_infoText_charPerLine_max" 
-       type="integer">40</item>
+    <dimen name="com_ovhere_picwidget_widget_infoText_width_max" 
+       >240dp</dimen>
     
 </resources>

@@ -23,17 +23,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService.RemoteViewsFactory;
 
 import com.ovrhere.android.pictureinfocard.widget.R;
 import com.ovrhere.android.pictureinfocard.widget.prefs.PreferenceUtils;
+import com.ovrhere.android.pictureinfocard.widget.utils.TextClipper;
 
 /**
  * The factory to produce remote views for the information view text.
  * @author Jason J.
- * @version 0.1.0-20140812
+ * @version 0.1.2-20140813
  */
 public class InfoViewFlipperRemoteViewsFactory implements RemoteViewsFactory {
 	/** Class name for debugging purposes. */
@@ -120,8 +120,7 @@ public class InfoViewFlipperRemoteViewsFactory implements RemoteViewsFactory {
 	private void fetchData() {
 		SharedPreferences prefs = PreferenceUtils.getPreferences(mContext, mAppWidgetId);
 		Resources r = mContext.getResources();
-		boolean pictureDisplayed = 
-				prefs.getBoolean(
+		boolean pictureDisplayed = prefs.getBoolean(
 						r.getString(R.string.com_ovrhere_picwidget_pref_KEY_DISPLAY_PICTURE), 
 						false);
 		String timeValue = 
@@ -150,21 +149,26 @@ public class InfoViewFlipperRemoteViewsFactory implements RemoteViewsFactory {
 			String fullInfoText) {
 		Resources r = mContext.getResources();
 		int maxLines = 
-				r.getInteger(R.integer.com_ovrhere_picwidget_widget_text_mainText_lineLimit);
-		int charPerLine = 
-				r.getInteger(R.integer.com_ovhere_picwidget_widget_infoText_charPerLine_max);
-		if (pictureDisplayed && timeDisplayed){
-			charPerLine 
-				= r.getInteger(R.integer.com_ovhere_picwidget_widget_infoText_charPerLine_min);
-		} else if (pictureDisplayed || timeDisplayed){
-			charPerLine 
-				= r.getInteger(R.integer.com_ovhere_picwidget_widget_infoText_charPerLine_mid);
-		} 
-		//approx limit of character's per block.
-		int blockLimit = maxLines * charPerLine;
+				r.getInteger(R.integer.com_ovrhere_picwidget_factory_infotext_lineLimit);
 		
-		splitInfoText(fullInfoText, charPerLine, blockLimit);
+		float lineWidth = r.getDimensionPixelSize(
+				R.dimen.com_ovhere_picwidget_widget_infoText_width_max); 
+		if (pictureDisplayed && timeDisplayed){
+			lineWidth = r.getDimensionPixelSize(
+				R.dimen.com_ovhere_picwidget_widget_infoText_width_min);
+		} else if (pictureDisplayed || timeDisplayed){
+			lineWidth = r.getDimensionPixelSize(
+					R.dimen.com_ovhere_picwidget_widget_infoText_width_mid);
+		}				
+		float textSize = r.getDimensionPixelSize(
+				R.dimen.com_ovrhere_picwidget_widget_text_info_size);
+		
+		mInfoText = TextClipper.clipText(
+				fullInfoText, textSize, 
+				lineWidth, maxLines);
+		
 	}
+	
 
 	/**
 	 * Splits the text into blocks based upon indents, spaces and tabs.
@@ -172,41 +176,50 @@ public class InfoViewFlipperRemoteViewsFactory implements RemoteViewsFactory {
 	 * @param charPerLine The character limit per line of each block
 	 * @param blockLimit The character limit of each block
 	 */
+	@Deprecated
 	private void splitInfoText(String fullInfoText, int charPerLine,
 			int blockLimit) {
 		while (fullInfoText.length() > 0){
 			String currBlock = "";
 			int currBlockLimit = blockLimit;
-			Log.d(CLASS_NAME, "index:"+mInfoText.size());
 			
 			while (fullInfoText.contains("\n") && currBlockLimit > 0){
 				int indentIndex_plus = fullInfoText.indexOf("\n") + 1;
+				
+				if (indentIndex_plus > currBlockLimit){
+					//we have no assurance that we won't clip a word incorrectly.
+					break; 
+				}
 				//add the string, including indent.
 				currBlock +=  fullInfoText.substring(0, indentIndex_plus);
 				fullInfoText = fullInfoText.substring(indentIndex_plus);
 				currBlockLimit -= charPerLine; //new line, so remove 1 line
 			}
+			
 						
 			if (fullInfoText.length() <= currBlockLimit){
 				//the remaining string will fit.
 				currBlock += fullInfoText;
 				fullInfoText = "";
-			} else if (currBlockLimit > 0){ //no new lines remaining 
-				currBlock += fullInfoText.substring(0, currBlockLimit +1);
-				//check one past the limit, find last space or tab.				
-				if (currBlock.lastIndexOf(" ") > 0){
-					currBlockLimit = currBlock.lastIndexOf(" ");
-				} else if (currBlock.lastIndexOf("\t") > 0){
-					currBlockLimit = currBlock.lastIndexOf("\t");
-				}
 				
-				//re-splice the string.
-				currBlock += fullInfoText.substring(0, currBlockLimit);
-				fullInfoText = fullInfoText.substring(currBlockLimit);
+			} else if (currBlockLimit > 0){ //no new lines remaining 
+				String potentialString = fullInfoText.substring(0, currBlockLimit +1);
+				
+				//check one past the limit, find last space or tab.				
+				if (potentialString.lastIndexOf(" ") > 0){
+					currBlockLimit = potentialString.lastIndexOf(" ");
+				} else if (potentialString.lastIndexOf("\t") > 0){
+					currBlockLimit = potentialString.lastIndexOf("\t");
+				} 
+				//if the block is empty, or there are spaces
+				if (currBlock.isEmpty() || currBlockLimit + 1 < potentialString.length()){
+					//add the string
+					currBlock += fullInfoText.substring(0, currBlockLimit);
+					fullInfoText = fullInfoText.substring(currBlockLimit);	
+				}				
 			}
 			//add block to list.
-			mInfoText.add(currBlock);
-			Log.d(CLASS_NAME, "content: [["+currBlock+"]]");
+			mInfoText.add(currBlock.trim());
 		}
 		return;
 	}

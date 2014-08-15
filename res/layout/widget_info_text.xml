@@ -17,12 +17,12 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
    	android:id="@+id/com_ovrhere_picwidget_infotext_text"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     
     android:layout_gravity="center_vertical"
     android:gravity="center_vertical"
-        
-    android:maxLines="@integer/com_ovrhere_picwidget_widget_text_mainText_lineLimit"
+            
+    android:maxLines="@integer/com_ovrhere_picwidget_widget_infotext_lineLimit"
     
    	android:textColor="@color/com_ovrhere_picwidget_white"
    	android:textSize="@dimen/com_ovrhere_picwidget_widget_text_info_size"   	
