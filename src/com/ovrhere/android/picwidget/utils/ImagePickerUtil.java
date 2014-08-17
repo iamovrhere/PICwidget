@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.ovrhere.android.pictureinfocard.widget.utils;
+package com.ovrhere.android.picwidget.utils;
 
 import android.app.Activity;
 import android.content.Context;

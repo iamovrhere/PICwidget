@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.ovrhere.android.pictureinfocard.widget.provider;
+package com.ovrhere.android.picwidget.ui.provider;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -28,10 +28,10 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import com.ovrhere.android.pictureinfocard.widget.R;
-import com.ovrhere.android.pictureinfocard.widget.prefs.PreferenceUtils;
-import com.ovrhere.android.pictureinfocard.widget.remoteviews.AdapterViewFlipperWidgetService;
-import com.ovrhere.android.pictureinfocard.widget.ui.PICWidgetConfigurationActivity;
-import com.ovrhere.android.pictureinfocard.widget.utils.FileUtil;
+import com.ovrhere.android.picwidget.prefs.PreferenceUtils;
+import com.ovrhere.android.picwidget.ui.PICWidgetConfigurationActivity;
+import com.ovrhere.android.picwidget.ui.remoteviews.AdapterViewFlipperWidgetService;
+import com.ovrhere.android.picwidget.utils.FileUtil;
 
 /**
  * The {@link AppWidgetProvider} for the widget. 
@@ -40,11 +40,11 @@ import com.ovrhere.android.pictureinfocard.widget.utils.FileUtil;
  * @author Jason J.
  * @version 0.4.0-20140815
  */
-public class PictureInfoCardWidgetProvider extends AppWidgetProvider {
+public class PICWidgetProvider extends AppWidgetProvider {
 	/** Class name for debugging purposes. */
 	@SuppressWarnings("unused")
 	final static private String CLASS_NAME = 
-			PictureInfoCardWidgetProvider.class.getSimpleName();
+			PICWidgetProvider.class.getSimpleName();
 	
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager,
@@ -60,7 +60,7 @@ public class PictureInfoCardWidgetProvider extends AppWidgetProvider {
             RemoteViews remoteViews = 
     				new RemoteViews( 
     						context.getPackageName(), 
-    						R.layout.pic_info_card_appwidget);
+    						R.layout.appwidget_pic_info_call);
             
             setConfigIntent(context, appWidgetId, remoteViews);
 	        //pending intent complete.

@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.ovrhere.android.pictureinfocard.widget.remoteviews;
+package com.ovrhere.android.picwidget.ui.remoteviews;
 
 import android.content.Intent;
 import android.widget.RemoteViewsService;

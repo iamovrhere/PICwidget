@@ -13,14 +13,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.ovrhere.android.pictureinfocard.widget.ui;
+package com.ovrhere.android.picwidget.ui;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -41,17 +40,17 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.ovrhere.android.pictureinfocard.widget.R;
-import com.ovrhere.android.pictureinfocard.widget.prefs.PreferenceUtils;
-import com.ovrhere.android.pictureinfocard.widget.provider.PictureInfoCardWidgetProvider;
-import com.ovrhere.android.pictureinfocard.widget.utils.FileUtil;
-import com.ovrhere.android.pictureinfocard.widget.utils.ImagePickerUtil;
+import com.ovrhere.android.picwidget.prefs.PreferenceUtils;
+import com.ovrhere.android.picwidget.ui.provider.PICWidgetProvider;
+import com.ovrhere.android.picwidget.utils.FileUtil;
+import com.ovrhere.android.picwidget.utils.ImagePickerUtil;
 
 /**
  * The configuration Activity (derived from MainActivity) in progress.
  * (To be) Used to configure the widget at launch and otherwise.
  *  
  * @author Jason J.
- * @version 0.4.0-20140815
+ * @version 0.4.1-20140818
  */
 public class PICWidgetConfigurationActivity extends Activity 
 implements OnClickListener, OnFocusChangeListener {
@@ -354,16 +353,17 @@ implements OnClickListener, OnFocusChangeListener {
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
 	}
 	
-	/** Notifies the widget(s) the the preferences have been updated. */
-	private void updateWidgets() {
+	/** Notifies the widget the the preferences have been updated. */
+	private void updateWidget(){
 		AppWidgetManager widgetManager = AppWidgetManager.getInstance(this);
-		ComponentName widgetComponent = new ComponentName(this, PictureInfoCardWidgetProvider.class);
+		//ComponentName widgetComponent = new ComponentName(this, PICWidgetProvider.class);
 		
-		int[] widgetIds = widgetManager.getAppWidgetIds(widgetComponent);
+		int[] widgetIds = new int[]{mAppWidgetId}; 
+				//widgetManager.getAppWidgetIds(widgetComponent);
 		Intent update = new Intent();
 		update.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetIds);
 		update.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-		update.setClass(this, PictureInfoCardWidgetProvider.class);
+		update.setClass(this, PICWidgetProvider.class);
 		
 		widgetManager.notifyAppWidgetViewDataChanged(
         		mAppWidgetId, 
@@ -400,10 +400,12 @@ implements OnClickListener, OnFocusChangeListener {
 			//final step	
 			if (isFirstRun){
 				setUpWidget();
+				finish();
+				updateWidget();
 			} else {
-				updateWidgets();
-			}
-			finish();
+				updateWidget();
+				finish();
+			}			
 			break;
 		case R.id.com_ovrhere_picwidget_activity_config_button_cancel:
 			setResult(RESULT_CANCELED);
@@ -412,7 +414,6 @@ implements OnClickListener, OnFocusChangeListener {
 			
 		case R.id.com_ovrhere_picwidget_activity_config_button_selectPicture:
 			launchImagePicker();
-			//TODO handle results
 			break;
 		case R.id.com_ovrhere_picwidget_activity_config_button_removePicture:
 			isPictureSet = false;

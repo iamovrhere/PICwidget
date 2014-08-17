@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.ovrhere.android.pictureinfocard.widget.remoteviews;
+package com.ovrhere.android.picwidget.ui.remoteviews;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +27,8 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService.RemoteViewsFactory;
 
 import com.ovrhere.android.pictureinfocard.widget.R;
-import com.ovrhere.android.pictureinfocard.widget.prefs.PreferenceUtils;
-import com.ovrhere.android.pictureinfocard.widget.utils.TextClipper;
+import com.ovrhere.android.picwidget.prefs.PreferenceUtils;
+import com.ovrhere.android.picwidget.utils.TextClipper;
 
 /**
  * The factory to produce remote views for the information view text.
