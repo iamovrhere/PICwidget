@@ -31,7 +31,7 @@ import android.util.Log;
 
 /** File utility for copying and viewing files.
  * @author Jason J.
- * @version 0.2.0-20140815
+ * @version 0.3.0-20140819
  */
 public class FileUtil {
 	/** Class name for debugging purposes. */
@@ -39,6 +39,35 @@ public class FileUtil {
 	/** Used for debugging. */
 	final static private boolean DEBUG = false;
 
+	/**
+	 * Writes file from a path to a destination
+	 * @param context The current context
+	 * @param inputStream The input stream file to write
+	 * @param destName The destination name to use. 
+	 * @throws IOException Re-throws exception caused in writing.
+	 */
+	public static void writeFileToInternal(Context context, 
+			InputStream inputStream, String destName) throws IOException{
+		try {
+			OutputStream out = 
+					context.openFileOutput(destName, Context.MODE_PRIVATE);
+			// Transfer bytes from in to out
+	        byte[] buf = new byte[1024];
+	        int len = 1;
+	        while ((len = inputStream.read(buf)) > 0) {
+	            out.write(buf, 0, len);
+	        }
+	        inputStream.close();
+	        out.close();
+		} catch (IOException e){
+			if (DEBUG){
+				Log.e(CLASS_NAME, "For stream: \""+inputStream+"\"; "+e);
+				e.printStackTrace();
+			}
+			throw e;
+		}         
+	}
+	
 	/**
 	 * Copies file from a path to a destination
 	 * @param context The current context
@@ -50,16 +79,8 @@ public class FileUtil {
 			String sourcePath, String destName){
 		try {
 			InputStream in = new FileInputStream(sourcePath);
-			OutputStream out = 
-					context.openFileOutput(destName, Context.MODE_PRIVATE);
-			// Transfer bytes from in to out
-	        byte[] buf = new byte[1024];
-	        int len = 1;
-	        while ((len = in.read(buf)) > 0) {
-	            out.write(buf, 0, len);
-	        }
+			writeFileToInternal(context, in, destName);
 	        in.close();
-	        out.close();
 		} catch (FileNotFoundException e){
 			if (DEBUG){
 				Log.e(CLASS_NAME, "For file: \""+sourcePath+"\"; "+e);
@@ -76,12 +97,14 @@ public class FileUtil {
 		return true;
 	}
 	/**
+	 * See {@link BitmapUtil}.
 	 * The image complement to {@link #copyFileToInternal(Context, String, String, int)}.
 	 * Reads (bitmap) file from internal and returns it's bitmap.
 	 * @param context The currenct context.
 	 * @param fileName The file name 
 	 * @return The bitmap on success, <code>null</code> when file not found.
 	 */
+	@Deprecated
 	public static Bitmap readBitmapFromInternal(Context context, 
 			String fileName){
 		try {
@@ -94,11 +117,11 @@ public class FileUtil {
 		}
 		return null;
 	}
-	/** Deletes the file from internal. Convience function for 
+	/** Deletes the file from internal. Convenience function for 
 	 * {@link Context#deleteFile(String)}.
 	 * @param context The current context.
 	 * @param fileName The file to delete
-	 * @return <code>true</code> if sucessfully deleted, <code>false</code> otherwise.
+	 * @return <code>true</code> if successfully deleted, <code>false</code> otherwise.
 	 */
 	public static boolean deleteFromInternal(Context context, String fileName){
 		return context.deleteFile(fileName);
