@@ -24,6 +24,7 @@
      android:baselineAligned="false"
      android:paddingLeft="@dimen/com_ovrhere_picwidget_widget_layout_sidePadding"
      android:paddingRight="@dimen/com_ovrhere_picwidget_widget_layout_sidePadding"
+     android:focusable="true"
      >
 
         <!--
@@ -39,7 +40,11 @@
         android:paddingRight="@dimen/com_ovrhere_picwidget_widget_item_padding"      
         android:paddingBottom="0dp"
         android:layout_gravity="center_vertical"
+        
         android:id="@+id/com_ovrhere_picwidget_widget_layout_imgContainer"
+        android:background="@drawable/click_frame_bg_clickable_left"
+        
+        android:focusable="true"
         >
         
         <ImageView
@@ -52,16 +57,33 @@
 	        />
 
         <TextView
-            android:id="@+id/com_ovrhere_picwidget_widget_button_edit"
+            android:id="@+id/com_ovrhere_picwidget_widget_text_call"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/com_ovrhere_picwidget_widget_img_mainPicture"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="-2dp"
-            android:text="@string/com_ovrhere_picwidget_text_edit"
-            android:textColor="@color/com_ovrhere_picwidget_white_translucent"
-            android:textSize="10sp"
+            android:layout_marginTop="-1dp"
+            
+            
+            android:text="@string/com_ovrhere_picwidget_text_call"
+            android:textColor="@color/com_ovrhere_picwidget_white_translucent"            
+            android:textSize="11sp"
             tools:ignore="SmallSp" />
+
+        <ImageView
+            android:id="@+id/com_ovrhere_picwidget_widget_img_call"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            
+            android:layout_alignTop="@+id/com_ovrhere_picwidget_widget_text_call"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="-3dp"                        
+            
+            android:src="@android:drawable/ic_menu_call" 
+            android:scaleType="centerInside"
+            android:contentDescription="@string/com_ovrhere_picwidget_contentDescrip_callPicture"
+            
+            />
 
     </RelativeLayout>
 
@@ -71,53 +93,59 @@
         android:layout_weight="1"
         android:layout_gravity="center_vertical"
         
-        android:padding="@dimen/com_ovrhere_picwidget_widget_item_padding"
+        android:id="@+id/com_ovrhere_picwidget_widget_layout_bodyContainer"
+        android:background="@drawable/click_frame_bg_clickable_right"
+        
+        android:focusable="true"
         >
-    <AdapterViewFlipper 
-        android:id="@+id/com_ovrhere_picwidget_widget_viewAnimator_infoText"
-        
-        android:autoStart="true"
-        android:loopViews="true"
-        android:flipInterval="@integer/com_ovrhere_picwidget_widget_viewAdapter_switchTime"
-        
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        
-        android:layout_gravity="center_vertical"
-    	android:gravity="center_vertical"
-    
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        
-        /> 
-        
-         <ProgressBar
-             android:id="@+id/com_ovrhere_picwidget_widget_progress_noText"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             
-            android:layout_gravity="center_vertical"
-	    	android:gravity="center_vertical"
-	    
-	        android:layout_centerHorizontal="true"
+	    <AdapterViewFlipper 
+	        android:id="@+id/com_ovrhere_picwidget_widget_viewAnimator_infoText"
+	        
+	        android:autoStart="true"
+	        android:loopViews="true"
+	        android:flipInterval="@integer/com_ovrhere_picwidget_widget_viewAdapter_switchTime"
+	        
+	        android:layout_width="wrap_content"
+	        android:layout_height="match_parent"
+	        
+	        android:padding="@dimen/com_ovrhere_picwidget_widget_item_padding"
+	        android:layout_alignParentLeft="true"
+	        android:layout_toLeftOf="@+id/com_ovrhere_picwidget_widget_frame_clock"
 	        android:layout_centerVertical="true"
 	        
-	        style="?android:attr/progressBarStyleSmall"
-         />
-
-     </RelativeLayout>
+	        android:layout_gravity="center"
+	    	android:gravity="center"    
+	        
+	        /> 
+	        
+	         <ProgressBar
+	             android:id="@+id/com_ovrhere_picwidget_widget_progress_noText"
+	             android:layout_width="wrap_content"
+	             android:layout_height="wrap_content"
+	             
+	            android:layout_gravity="center"
+	    		android:gravity="center"
+	    		
+	    		android:padding="@dimen/com_ovrhere_picwidget_widget_item_padding"
+	        	android:layout_alignParentLeft="true"
+	        	android:layout_toLeftOf="@+id/com_ovrhere_picwidget_widget_frame_clock"
+		       android:layout_centerVertical="true" 
+		        style="?android:attr/progressBarStyleSmall"
+	         />
      
-    <FrameLayout
-        android:id="@+id/com_ovrhere_picwidget_widget_frame_clock"
-        android:layout_width="@dimen/com_ovrhere_picwidget_widget_frame_clockWidth"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:padding="@dimen/com_ovrhere_picwidget_widget_item_padding"
-        >
-
-        <AnalogClock
-            android:id="@+id/com_ovrhere_picwidget_widget_analogClock"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </FrameLayout>
+	    <FrameLayout
+	        android:id="@+id/com_ovrhere_picwidget_widget_frame_clock"
+	        android:layout_width="@dimen/com_ovrhere_picwidget_widget_frame_clockWidth"
+	        android:layout_height="wrap_content"
+	        android:layout_centerVertical="true"
+	        android:layout_alignParentRight="true"
+	        android:padding="@dimen/com_ovrhere_picwidget_widget_item_padding"
+	        >
+	
+	        <AnalogClock
+	            android:id="@+id/com_ovrhere_picwidget_widget_analogClock"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content" />
+	    </FrameLayout>
+    </RelativeLayout>
 </LinearLayout>
