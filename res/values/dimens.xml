@@ -62,4 +62,17 @@
     <dimen name="com_ovhere_picwidget_internal_resizeImgSize" 
        >200dp</dimen>
     
+     <!-- The estimated widget text width per line minimally 
+    (picture + time enabled). -->
+    <dimen name="com_ovhere_picwidget_widget_infoText_width_min" 
+       >124dp</dimen>
+    <!-- The estimated widget text width per line middle value 
+    (picture enabled only). -->
+    <dimen name="com_ovhere_picwidget_widget_infoText_width_mid" 
+       >174dp</dimen>
+    <!-- The estimated widget text width per line max value 
+    (text only). -->
+    <dimen name="com_ovhere_picwidget_widget_infoText_width_max" 
+       >240dp</dimen>
+    
 </resources>

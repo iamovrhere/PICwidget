@@ -18,8 +18,10 @@ package com.ovrhere.android.picwidget.ui.provider;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -29,9 +31,11 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import com.ovrhere.android.pictureinfocard.widget.R;
+import com.ovrhere.android.picwidget.broadcastreceivers.ConfigurationBroadcastReceiver;
 import com.ovrhere.android.picwidget.prefs.PreferenceUtils;
 import com.ovrhere.android.picwidget.ui.PICWidgetConfigurationActivity;
 import com.ovrhere.android.picwidget.ui.remoteviews.AdapterViewFlipperWidgetService;
+import com.ovrhere.android.picwidget.utils.BitmapUtil;
 import com.ovrhere.android.picwidget.utils.FileUtil;
 
 /**
@@ -42,9 +46,10 @@ import com.ovrhere.android.picwidget.utils.FileUtil;
  * <code>&lt;uses-permission android:name="android.permission.CALL_PHONE" /&gt;</code>
  *  
  * @author Jason J.
- * @version 0.5.0-20140819
+ * @version 0.6.0-20140819
  */
-public class PICWidgetProvider extends AppWidgetProvider {
+public class PICWidgetProvider extends AppWidgetProvider 
+	implements ConfigurationBroadcastReceiver.OnConfigChangeListener {
 	/** Class name for debugging purposes. */
 	//@SuppressWarnings("unused")
 	final static private String CLASS_NAME = 
@@ -65,6 +70,13 @@ public class PICWidgetProvider extends AppWidgetProvider {
 			int[] appWidgetIds) {
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
 		
+		ConfigurationBroadcastReceiver configReceiver =
+				new ConfigurationBroadcastReceiver();
+		configReceiver.setOnConfigChangeListener(this);
+		context.getApplicationContext().registerReceiver(
+				configReceiver, 
+				new IntentFilter(Intent.ACTION_CONFIGURATION_CHANGED));
+		
         final int SIZE = appWidgetIds.length;
         for (int i = 0; i < SIZE; i++) {
             int appWidgetId = appWidgetIds[i];
@@ -81,7 +93,7 @@ public class PICWidgetProvider extends AppWidgetProvider {
 	        configViewFlipper(context, appWidgetId, remoteViews);
 	        
             setPendingIntents(context, appWidgetId, remoteViews, prefs);
-	        	        
+            	        	        
 	        //clear remote views
 	        appWidgetManager.updateAppWidget( appWidgetId, null ); 
         	appWidgetManager.updateAppWidget( appWidgetId, remoteViews );
@@ -110,19 +122,56 @@ public class PICWidgetProvider extends AppWidgetProvider {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		super.onReceive(context, intent);
-		if (intent.getAction().equals(BROADCAST_INTENT_CALL)){
-			String phone = intent.getStringExtra(EXTRA_KEY_PHONE);
-			
-			if (phone == null || phone.isEmpty()){
-				Log.e(CLASS_NAME, BROADCAST_INTENT_CALL+": No number supplied.");
-				return; //no number, no go.
-			}
-			//start *actual* call intent.
-			Intent callIntent = new Intent(Intent.ACTION_CALL);           
-            callIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            callIntent.setData(Uri.parse("tel:"+phone));
-            context.startActivity(callIntent);
+		String action = intent.getAction();
+		if (action.equals(BROADCAST_INTENT_CALL)){
+			launchCallIntent(context, intent);
+		} 
+	}
+
+	
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	/// Receive actions
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	/** Launches the call intent. 
+	 * @param context Context straight from {@link #onReceive(Context, Intent)}
+	 * @param intent Intent straight from {@link #onReceive(Context, Intent)} */
+	static private void launchCallIntent(Context context, Intent intent) {
+		String phone = intent.getStringExtra(EXTRA_KEY_PHONE);
+		
+		if (phone == null || phone.isEmpty()){
+			Log.e(CLASS_NAME, BROADCAST_INTENT_CALL+": No number supplied.");
+			return; //no number, no go.
 		}
+		//start *actual* call intent.
+		Intent callIntent = new Intent(Intent.ACTION_CALL);           
+		callIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		callIntent.setData(Uri.parse("tel:"+phone));
+		context.startActivity(callIntent);
+	}
+	
+	/** Sends broadcast update to all widgets. 
+	 * @param context Context straight from {@link #onReceive(Context, Intent)}
+	 * @param intent Intent straight from {@link #onReceive(Context, Intent)} */
+	static private void sendUpdateBroadcast(Context context, Intent intent){
+		AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+		ComponentName widgetComponent = 
+				new ComponentName(context, PICWidgetProvider.class);
+		
+		int[] widgetIds = widgetManager.getAppWidgetIds(widgetComponent);
+		Intent update = new Intent();
+		update.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetIds);
+		update.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+		update.setClass(context, PICWidgetProvider.class);
+		
+		for (int index = 0; index < widgetIds.length; index++) {
+			//Required to ensure the text views update
+            widgetManager.notifyAppWidgetViewDataChanged(
+            		widgetIds[index], 
+	        		R.id.com_ovrhere_picwidget_widget_viewAnimator_infoText);
+		}
+		
+		context.sendBroadcast(update);
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////
@@ -226,17 +275,20 @@ public class PICWidgetProvider extends AppWidgetProvider {
 				prefs.getString(
 						r.getString(R.string.com_ovrhere_picwidget_pref_KEY_CONTACT_PHONE_NUMBER),
 						"");
+		boolean showCallText = 
+				r.getBoolean(R.bool.com_ovrhere_picwidget_widget_callText);
+		
 		final int phoneImgId = R.id.com_ovrhere_picwidget_widget_img_call;
 		final int phoneText = R.id.com_ovrhere_picwidget_widget_text_call;
-		if (phone.isEmpty()){
+		if (phone.isEmpty() || !showCallText){
 			remoteViews.setViewVisibility(phoneImgId, View.GONE);
 			remoteViews.setViewVisibility(phoneText, View.GONE);
 		}
 		
 		final int imgContainId = R.id.com_ovrhere_picwidget_widget_layout_imgContainer;
 		
-		Bitmap bitmap = FileUtil.readBitmapFromInternal(context, fileName);
-		if (bitmap != null){
+		Bitmap bitmap = BitmapUtil.readBitmapFromInternal(context, fileName);
+		if (bitmap != null ){ 
 			remoteViews.setImageViewBitmap(
 						R.id.com_ovrhere_picwidget_widget_img_mainPicture, 
 						bitmap);
@@ -305,5 +357,16 @@ public class PICWidgetProvider extends AppWidgetProvider {
 		remoteViews.setEmptyView(
 				R.id.com_ovrhere_picwidget_widget_viewAnimator_infoText, 
 				R.id.com_ovrhere_picwidget_widget_progress_noText);
+	}
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	/// Listeners
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@Override
+	public void onConfigChange(ConfigurationBroadcastReceiver congfigBroadcastReceiver,
+			Context context, Intent intent) {
+		context.getApplicationContext().unregisterReceiver(congfigBroadcastReceiver);
+		sendUpdateBroadcast(context, intent);
 	}
 }

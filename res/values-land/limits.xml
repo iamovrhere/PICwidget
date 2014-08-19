@@ -15,23 +15,16 @@
    limitations under the License.
 -->
 <resources>
-    <!-- The input character limit for the info text. -->
-    <item name="com_ovrhere_picwidget_activity_config_textin_info_charLimit" 
-        type="integer">120</item>
-    
     <!-- The output line limit for the info text. (changes depending orientation). -->
     <item name="com_ovrhere_picwidget_widget_infotext_lineLimit" 
-        type="integer">4</item>
+        type="integer">2</item>
      <!-- The output line limit for the info text. (changes depending orientation). -->
     <item name="com_ovrhere_picwidget_factory_infotext_lineLimit" 
-        type="integer">4</item>
+        type="integer">2</item>
     
-     <!-- The time for the view adapter flipper to flip. 6.5 s -->
-    <item name="com_ovrhere_picwidget_widget_viewAdapter_switchTime" 
-        type="integer">6500</item>
     <!-- Whether or not to show the text "Call". 
     Default true (changes depending orientation). -->
     <item name="com_ovrhere_picwidget_widget_callText" 
-        type="bool">1</item>
+        type="bool">0</item>
     
 </resources>
