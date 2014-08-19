@@ -33,7 +33,7 @@ import com.ovrhere.android.picwidget.utils.TextClipper;
 /**
  * The factory to produce remote views for the information view text.
  * @author Jason J.
- * @version 0.2.0-20140815
+ * @version 0.2.1-20140819
  */
 public class InfoViewFlipperRemoteViewsFactory implements RemoteViewsFactory {
 	/** Class name for debugging purposes. */
@@ -120,9 +120,15 @@ public class InfoViewFlipperRemoteViewsFactory implements RemoteViewsFactory {
 	private void fetchData() {
 		SharedPreferences prefs = PreferenceUtils.getPreferences(mContext, mAppWidgetId);
 		Resources r = mContext.getResources();
-		boolean pictureDisplayed = prefs.getBoolean(
+		//if image is displayed or there is a phone number
+		boolean pictureDisplayed = 
+				prefs.getBoolean(
 						r.getString(R.string.com_ovrhere_picwidget_pref_KEY_DISPLAY_PICTURE), 
-						false);
+						false) ||
+				(prefs.getString(
+						r.getString(R.string.com_ovrhere_picwidget_pref_KEY_CONTACT_PHONE_NUMBER),
+						"").isEmpty() == false);
+		
 		String timeValue = 
 				prefs.getString(
 						r.getString(R.string.com_ovrhere_picwidget_pref_KEY_TIME_DISPLAY), 
