@@ -56,4 +56,10 @@
 	Alternative sizes will need to supplied with dropdown eventually. -->
     <dimen name="com_ovrhere_picwidget_widget_text_info_size">13dp</dimen>
     
+    <!-- limits -->
+    <eat-comment/>
+    <!-- The limits of a copied image resize. -->
+    <dimen name="com_ovhere_picwidget_internal_resizeImgSize" 
+       >200dp</dimen>
+    
 </resources>

@@ -15,6 +15,9 @@
  */
 package com.ovrhere.android.picwidget.ui;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -25,6 +28,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,6 +49,7 @@ import android.widget.Spinner;
 import com.ovrhere.android.pictureinfocard.widget.R;
 import com.ovrhere.android.picwidget.prefs.PreferenceUtils;
 import com.ovrhere.android.picwidget.ui.provider.PICWidgetProvider;
+import com.ovrhere.android.picwidget.utils.BitmapUtil;
 import com.ovrhere.android.picwidget.utils.FileUtil;
 import com.ovrhere.android.picwidget.utils.ImagePickerUtil;
 
@@ -53,7 +58,7 @@ import com.ovrhere.android.picwidget.utils.ImagePickerUtil;
  * (To be) Used to configure the widget at launch and otherwise.
  *  
  * @author Jason J.
- * @version 0.5.0-20140818
+ * @version 0.6.0-20140819
  */
 public class PICWidgetConfigurationActivity extends Activity 
 implements OnClickListener, OnFocusChangeListener, OnCheckedChangeListener {
@@ -156,14 +161,11 @@ implements OnClickListener, OnFocusChangeListener, OnCheckedChangeListener {
 			isPictureSet = savedInstanceState.getBoolean(KEY_PICTURE_SET);			
 		} 
 		
-		if (mAppWidgetId < 0) {
-			Intent intent = getIntent();
-			Bundle extras = intent.getExtras();
-			if (extras != null) {
-			    mAppWidgetId = extras.getInt(
-			            AppWidgetManager.EXTRA_APPWIDGET_ID, 
-			            AppWidgetManager.INVALID_APPWIDGET_ID);
-			}
+		Bundle extras = getIntent().getExtras();
+		if (mAppWidgetId < 0 && extras != null) {
+		    mAppWidgetId = extras.getInt(
+		            AppWidgetManager.EXTRA_APPWIDGET_ID, 
+		            AppWidgetManager.INVALID_APPWIDGET_ID);
 		}
 		displayImageName =
 				getResources().getString(R.string.com_ovrhere_picwidget_filename_imgStub) + 
@@ -179,8 +181,8 @@ implements OnClickListener, OnFocusChangeListener, OnCheckedChangeListener {
 		if (requestCode == REQUEST_IMAGE_PICKER_SELECT && 
 			resultCode == Activity.RESULT_OK){  
 			String sourcePath = ImagePickerUtil.getPathFromCameraData(this, data);
-			//TODO resize image to be smaller res
-			if (FileUtil.copyFileToInternal(this, sourcePath, displayImageName)){
+			
+			if (resizeAndCopyImage(sourcePath)){
 				isPictureSet = true;
 				setDisplayImage();
 			} else {
@@ -189,6 +191,7 @@ implements OnClickListener, OnFocusChangeListener, OnCheckedChangeListener {
 		}
 		
 	}
+	
 
 
 	@Override
@@ -286,11 +289,29 @@ implements OnClickListener, OnFocusChangeListener, OnCheckedChangeListener {
 	/// Helper functions
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	/** Resizes and copies image to internal memory. 
+	 * @param sourcePath The location of the original image.
+	 * @return <code>true</code> if successful, <code>false</code> on failure.	 */
+	private boolean resizeAndCopyImage(String sourcePath) {
+		int px = getResources().getDimensionPixelOffset(
+				R.dimen.com_ovhere_picwidget_internal_resizeImgSize);
+		Bitmap selectedImg = BitmapFactory.decodeFile(sourcePath);
+		selectedImg = BitmapUtil.scaleDownBitmap(selectedImg, px);
+		InputStream input = new ByteArrayInputStream(
+								BitmapUtil.bitmapToBytes(selectedImg));
+		try {
+			FileUtil.writeFileToInternal(this, input, displayImageName);
+		} catch (IOException e){
+			return false;
+		}
+		return true;
+	}
+	
 	/**
 	 * Set's picture display based on existing file & the accompanying button.
 	 */
 	private void setDisplayImage() {
-		Bitmap bitmap = FileUtil.readBitmapFromInternal(this, displayImageName);
+		Bitmap bitmap = BitmapUtil.readBitmapFromInternal(this, displayImageName);
 		boolean imgExists = bitmap != null;
 		if (imgExists){
 			displayImage.setImageBitmap(bitmap);
@@ -404,10 +425,7 @@ implements OnClickListener, OnFocusChangeListener, OnCheckedChangeListener {
 				);
 	}
 	
-	/** Launchers image picker with {@link #REQUEST_IMAGE_PICKER_SELECT}. */
-	private void launchImagePicker(){
-		ImagePickerUtil.launchPicker(this, REQUEST_IMAGE_PICKER_SELECT);	
-	}
+	
 	/** Hides the keyboard. */
 	private void hideKeyboard(View v){
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -426,6 +444,7 @@ implements OnClickListener, OnFocusChangeListener, OnCheckedChangeListener {
 		update.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
 		update.setClass(this, PICWidgetProvider.class);
 		
+		//Required to ensure the text views update
 		widgetManager.notifyAppWidgetViewDataChanged(
         		mAppWidgetId, 
         		R.id.com_ovrhere_picwidget_widget_viewAnimator_infoText);
@@ -437,6 +456,39 @@ implements OnClickListener, OnFocusChangeListener, OnCheckedChangeListener {
 		Intent resultValue = new Intent();
 		resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
 		setResult(RESULT_OK, resultValue);
+	}
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	/// Action Helpers
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/** Defines actions to be don at completetion. */
+	private void configComplete() {
+		collectAndSet();
+		//final step	
+		if (isFirstRun){
+			setUpWidget();
+			finish();
+			updateWidget();
+		} else {
+			updateWidget();
+			finish();
+		}
+	}
+	
+	/** The actions to perform when removing the picture. */
+	private void removePicture() {
+		isPictureSet = false;
+		displayImage.setImageDrawable(
+				getResources().getDrawable(R.drawable.ic_no_picture)
+				);
+		FileUtil.deleteFromInternal(this, displayImageName);
+		btn_remove.setEnabled(false);
+	}
+	
+	/** Launchers image picker with {@link #REQUEST_IMAGE_PICKER_SELECT}. */
+	private void launchImagePicker(){
+		ImagePickerUtil.launchPicker(this, REQUEST_IMAGE_PICKER_SELECT);	
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////
@@ -467,36 +519,22 @@ implements OnClickListener, OnFocusChangeListener, OnCheckedChangeListener {
 	public void onClick(View v) {
 		switch (v.getId()){
 		case R.id.com_ovrhere_picwidget_activity_config_button_confirm:
-			collectAndSet();
-			//final step	
-			if (isFirstRun){
-				setUpWidget();
-				finish();
-				updateWidget();
-			} else {
-				updateWidget();
-				finish();
-			}			
+			configComplete();			
 			break;
 		case R.id.com_ovrhere_picwidget_activity_config_button_cancel:
 			setResult(RESULT_CANCELED);
 			finish();
-			break;
-			
+			break;			
 		case R.id.com_ovrhere_picwidget_activity_config_button_selectPicture:
 			launchImagePicker();
 			break;
 		case R.id.com_ovrhere_picwidget_activity_config_button_removePicture:
-			isPictureSet = false;
-			displayImage.setImageDrawable(
-					getResources().getDrawable(R.drawable.ic_no_picture)
-					);
-			FileUtil.deleteFromInternal(this, displayImageName);
-			btn_remove.setEnabled(false);
+			removePicture();
 			break;
 		default:
 			//nothing here
 		}
 	}
 	
+		
 }
