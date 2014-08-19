@@ -21,8 +21,9 @@
     android:minResizeHeight="@dimen/com_ovrhere_picwidget_minResizeHeight"
     android:updatePeriodMillis="0"
     android:initialLayout="@layout/appwidget_loading_widget"
+  	android:initialKeyguardLayout="@layout/appwidget_loading_widget"
     android:configure="com.ovrhere.android.picwidget.ui.PICWidgetConfigurationActivity" 
     android:resizeMode="none"
     android:widgetCategory="home_screen|keyguard"
-    android:initialKeyguardLayout="@layout/appwidget_pic_info_call">
+    >
 </appwidget-provider>
