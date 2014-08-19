@@ -24,6 +24,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -36,15 +37,28 @@ import com.ovrhere.android.picwidget.utils.FileUtil;
 /**
  * The {@link AppWidgetProvider} for the widget. 
  * Provides an interface for widget interactions (deletions, creations, updates, etc).
+ * 
+ * Requires:
+ * <code>&lt;uses-permission android:name="android.permission.CALL_PHONE" /&gt;</code>
  *  
  * @author Jason J.
- * @version 0.4.0-20140815
+ * @version 0.5.0-20140819
  */
 public class PICWidgetProvider extends AppWidgetProvider {
 	/** Class name for debugging purposes. */
-	@SuppressWarnings("unused")
+	//@SuppressWarnings("unused")
 	final static private String CLASS_NAME = 
 			PICWidgetProvider.class.getSimpleName();
+	
+	/** Broadcast intent name. Remember to keep this consistent with the manifest.
+	 * Expects: {@link #EXTRA_KEY_PHONE} */
+	final static private String BROADCAST_INTENT_CALL = 
+			"com.ovrhere.android.picwidget.ui.provider.PICWidgetProvider.BROADCAST_INTENT_CALL";
+			//PICWidgetProvider.class.getName()+".BROADCAST_INTENT_CALL";
+	/** Extra Key: The key for the phone number ONLY. String. */
+	final static private String EXTRA_KEY_PHONE = 
+			CLASS_NAME + ".EXTRA_KEY_PHONE";
+	
 	
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager,
@@ -60,14 +74,13 @@ public class PICWidgetProvider extends AppWidgetProvider {
             RemoteViews remoteViews = 
     				new RemoteViews( 
     						context.getPackageName(), 
-    						R.layout.appwidget_pic_info_call);
-            
-            setConfigIntent(context, appWidgetId, remoteViews);
-	        //pending intent complete.
+    						R.layout.appwidget_pic_info_call);                       
 	        
             configPicture(context, appWidgetId, remoteViews, prefs);
             configClock(context, appWidgetId, remoteViews, prefs);
 	        configViewFlipper(context, appWidgetId, remoteViews);
+	        
+            setPendingIntents(context, appWidgetId, remoteViews, prefs);
 	        	        
 	        //clear remote views
 	        appWidgetManager.updateAppWidget( appWidgetId, null ); 
@@ -94,17 +107,58 @@ public class PICWidgetProvider extends AppWidgetProvider {
         }
 	}
 	
+	@Override
+	public void onReceive(Context context, Intent intent) {
+		super.onReceive(context, intent);
+		if (intent.getAction().equals(BROADCAST_INTENT_CALL)){
+			String phone = intent.getStringExtra(EXTRA_KEY_PHONE);
+			
+			if (phone == null || phone.isEmpty()){
+				Log.e(CLASS_NAME, BROADCAST_INTENT_CALL+": No number supplied.");
+				return; //no number, no go.
+			}
+			//start *actual* call intent.
+			Intent callIntent = new Intent(Intent.ACTION_CALL);           
+            callIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            callIntent.setData(Uri.parse("tel:"+phone));
+            context.startActivity(callIntent);
+		}
+	}
+	
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	/// Utility functions
 	////////////////////////////////////////////////////////////////////////////////////////////////
+	/**Sets the pending intents for the widget. 
+	 * @param context The current context.
+	 * @param appWidgetId The current widget id.
+	 * @param remoteViews The remoteviews to attach intents to
+	 * @param prefs The current shared preference for this widget 
+	 */
+	static private void setPendingIntents(Context context, int appWidgetId,
+			RemoteViews remoteViews, SharedPreferences prefs) {
+		Resources r = context.getResources();
+		//if there is a number to call
+		String phoneNumber = prefs.getString(
+					r.getString(
+						R.string.com_ovrhere_picwidget_pref_KEY_CONTACT_PHONE_NUMBER),
+						"");
+		boolean useMultipleIntents =  !phoneNumber.isEmpty();
+		if (useMultipleIntents){
+	        setCallIntent(context, appWidgetId, remoteViews, phoneNumber);
+		}
+        setConfigIntent(context, appWidgetId, remoteViews, useMultipleIntents);
+        //pending intent complete.
+	}
 	
 	/** Sets the pending launch intent for #PICWidgetConfigurationActivity 
 	 * @param context Current context
 	 * @param appWidgetId The widget id of the configuration to load 
 	 * @param remoteViews The remoteView to attach the intent to
+	 * @param multipleIntents <code>true</code> to attach to body, <code>false</code>
+	 * to entire widget
 	 */
 	static private void setConfigIntent(Context context, int appWidgetId,
-			RemoteViews remoteViews) {
+			RemoteViews remoteViews, boolean multipleIntents) {
 		Intent launchIntent = new Intent(context, PICWidgetConfigurationActivity.class); 
 		launchIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 		
@@ -114,11 +168,46 @@ public class PICWidgetProvider extends AppWidgetProvider {
 											appWidgetId /* requestCode */, 
 											launchIntent, 
 											0 /* flags */);
-		
-
-		remoteViews.setOnClickPendingIntent(R.id.com_ovrhere_picwidget_widget_layout, 
-											pendingIntent);
+		if (multipleIntents){
+			remoteViews.setOnClickPendingIntent(
+					R.id.com_ovrhere_picwidget_widget_layout_bodyContainer, 
+					pendingIntent);
+		} else {
+			remoteViews.setOnClickPendingIntent(
+					R.id.com_ovrhere_picwidget_widget_layout, 
+					pendingIntent);
+		}
 	}
+	
+	 /** Sets the pending launch intent for call 
+	 * @param context Current context
+	 * @param appWidgetId The widget id of the configuration to load 
+	 * @param remoteViews The remoteView to attach the intent to
+	 * @param phone The phone number to call.
+	 */
+	static private void setCallIntent(Context context, int appWidgetId,
+			RemoteViews remoteViews, String phone) {
+		phone.replaceAll("[^0-9]", ""); //remove all non digits
+		
+		Intent callBroadcastIntent = new Intent(BROADCAST_INTENT_CALL);
+		callBroadcastIntent.putExtra(EXTRA_KEY_PHONE, phone);
+		
+        //set broadcast, so the provider can then launch it at the lock screen.
+        PendingIntent pendingIntent = 
+				PendingIntent.getBroadcast(	context,
+						//unique request code (or uri) required for unique pendingintent 
+											appWidgetId /* requestCode */, 
+											callBroadcastIntent, 
+											PendingIntent.FLAG_UPDATE_CURRENT /* flags */);
+        remoteViews.setOnClickPendingIntent(
+				R.id.com_ovrhere_picwidget_widget_layout_imgContainer, 
+				pendingIntent);         
+	 }
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	/// End intents
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	/** Configures the picture to display/hide for the widget.
 	 * @param context The current context.
 	 * @param appWidgetId The id of this widget.
@@ -133,26 +222,42 @@ public class PICWidgetProvider extends AppWidgetProvider {
 		String fileName =
 				r.getString(R.string.com_ovrhere_picwidget_filename_imgStub) + 
 				appWidgetId;
-		boolean displayPicture = 
-				prefs.getBoolean(key,false);
+		String phone = 
+				prefs.getString(
+						r.getString(R.string.com_ovrhere_picwidget_pref_KEY_CONTACT_PHONE_NUMBER),
+						"");
+		final int phoneImgId = R.id.com_ovrhere_picwidget_widget_img_call;
+		final int phoneText = R.id.com_ovrhere_picwidget_widget_text_call;
+		if (phone.isEmpty()){
+			remoteViews.setViewVisibility(phoneImgId, View.GONE);
+			remoteViews.setViewVisibility(phoneText, View.GONE);
+		}
 		
-		final int id = R.id.com_ovrhere_picwidget_widget_layout_imgContainer;
-		if (displayPicture){
-			Bitmap bitmap = FileUtil.readBitmapFromInternal(context, fileName);
-			if (bitmap != null){
-				remoteViews.setImageViewBitmap(
-							R.id.com_ovrhere_picwidget_widget_img_mainPicture, 
-							bitmap);
-				remoteViews.setViewVisibility(id, View.VISIBLE);
-				return;
-			}
-			//we must inform the widget that the image is gone.
-			prefs	.edit()
-					.putBoolean(key, false)
-					.commit();
-		} 
-		//if either the image is gone, or boolean false.
-		remoteViews.setViewVisibility(id, View.GONE);
+		final int imgContainId = R.id.com_ovrhere_picwidget_widget_layout_imgContainer;
+		
+		Bitmap bitmap = FileUtil.readBitmapFromInternal(context, fileName);
+		if (bitmap != null){
+			remoteViews.setImageViewBitmap(
+						R.id.com_ovrhere_picwidget_widget_img_mainPicture, 
+						bitmap);
+			remoteViews.setViewVisibility(imgContainId, View.VISIBLE);
+			return;
+		}
+		//we must inform the widget that the image is gone.
+		prefs	.edit()
+				.putBoolean(key, false)
+				.commit();
+	 
+		if (!phone.isEmpty()){
+			//set image view as call button
+			remoteViews.setViewVisibility(phoneImgId, View.GONE);			
+			remoteViews.setImageViewResource(
+					R.id.com_ovrhere_picwidget_widget_img_mainPicture, 
+					android.R.drawable.ic_menu_call);
+		} else {
+			//if either the image is gone, or boolean false.
+			remoteViews.setViewVisibility(imgContainId, View.GONE);
+		}
 	}
 	
 	/** Configures the clock to display/hide for the widget.

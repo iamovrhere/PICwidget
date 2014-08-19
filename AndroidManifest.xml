@@ -24,6 +24,8 @@
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="21" />
+
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     
    <application
         android:allowBackup="true"
@@ -42,6 +44,7 @@
         <receiver android:name="com.ovrhere.android.picwidget.ui.provider.PICWidgetProvider" >
 		    <intent-filter>
 		        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+		        <action android:name="com.ovrhere.android.picwidget.ui.provider.PICWidgetProvider.BROADCAST_INTENT_CALL" />
 		    </intent-filter>
 		    <meta-data android:name="android.appwidget.provider"
 	        	       android:resource="@xml/pic_appwidget_info" />
