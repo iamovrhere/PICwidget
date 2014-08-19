@@ -35,6 +35,9 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -50,10 +53,10 @@ import com.ovrhere.android.picwidget.utils.ImagePickerUtil;
  * (To be) Used to configure the widget at launch and otherwise.
  *  
  * @author Jason J.
- * @version 0.4.1-20140818
+ * @version 0.5.0-20140818
  */
 public class PICWidgetConfigurationActivity extends Activity 
-implements OnClickListener, OnFocusChangeListener {
+implements OnClickListener, OnFocusChangeListener, OnCheckedChangeListener {
 	
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,6 +81,12 @@ implements OnClickListener, OnFocusChangeListener {
 	/** Bundle key. The current {@link #isPictureSet} value. Boolean. */
 	final static private String KEY_PICTURE_SET = 
 			CLASS_NAME + ".KEY_PICTURE_SET";
+	/** Bundle key. The value of {@link #cb_allowPhone}. Boolean. */
+	final static private String KEY_ALLOW_PHONE_CHECK = 
+			CLASS_NAME + ".KEY_UNDERSTAND_PHONE_CHECK";
+	/** Bundle key. The content of {@link #et_infoText}. String. */
+	final static private String KEY_PHONE_NUMBER = 
+			CLASS_NAME + ".KEY_PHONE_NUMBER";
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	/// End bundle keys
@@ -96,6 +105,11 @@ implements OnClickListener, OnFocusChangeListener {
 	private ImageView displayImage = null;
 	/** The info text input. */
 	private EditText et_infoText = null;
+	/** The phone number text input. */
+	private EditText et_phoneNumber = null;
+	/** Checkbox defining if they understand conditions regarding checkbox. */ 
+	private CheckBox cb_allowPhone = null;
+	
 	/** The spinner to determine how to display time. */
 	private Spinner sp_timeDisplay = null;
 	/** The button to remove the current picture. */
@@ -113,9 +127,13 @@ implements OnClickListener, OnFocusChangeListener {
 		super.onSaveInstanceState(outState);
 		outState.putInt(KEY_APP_WIDGET_ID, mAppWidgetId);
 		outState.putString(KEY_INFO_TEXT, et_infoText.getText().toString());
-		outState.putInt(KEY_TIME_DISPLAY_CHOICE, sp_timeDisplay.getSelectedItemPosition());
+		outState.putInt(KEY_TIME_DISPLAY_CHOICE, 
+				sp_timeDisplay.getSelectedItemPosition());
 		outState.putBoolean(KEY_FIRST_RUN, isFirstRun);
 		outState.putBoolean(KEY_PICTURE_SET, isPictureSet);
+		outState.putBoolean(KEY_ALLOW_PHONE_CHECK, 				
+				cb_allowPhone.isChecked());
+		outState.putString(KEY_PHONE_NUMBER, et_phoneNumber.getText().toString());
 	}
 	
 	@Override
@@ -153,7 +171,6 @@ implements OnClickListener, OnFocusChangeListener {
 		
 		checkPreferences();
 		
-		//TODO finish the settings & configuring view		
 	}
 
 	@Override
@@ -162,6 +179,7 @@ implements OnClickListener, OnFocusChangeListener {
 		if (requestCode == REQUEST_IMAGE_PICKER_SELECT && 
 			resultCode == Activity.RESULT_OK){  
 			String sourcePath = ImagePickerUtil.getPathFromCameraData(this, data);
+			//TODO resize image to be smaller res
 			if (FileUtil.copyFileToInternal(this, sourcePath, displayImageName)){
 				isPictureSet = true;
 				setDisplayImage();
@@ -203,9 +221,22 @@ implements OnClickListener, OnFocusChangeListener {
 		et_infoText.setOnFocusChangeListener(this);
 		//TODO set maximum lines for edit text
 	
+		initPhoneViews();
+		
 		displayImage = (ImageView) 
 				findViewById(R.id.com_ovrhere_picwidget_activity_config_img_preview);
 		initSpinner();
+	}
+	/** Initializes the phone views (check + edit text). */
+	private void initPhoneViews() {
+		et_phoneNumber = (EditText)
+				findViewById(R.id.com_ovrhere_picwidget_activity_config_textin_phoneNum);
+		et_phoneNumber.setEnabled(false);
+		et_phoneNumber.setOnFocusChangeListener(this);
+		
+		cb_allowPhone = (CheckBox)
+				findViewById(R.id.com_ovrhere_picwidget_activity_config_check_phoneAllow);
+		cb_allowPhone.setOnCheckedChangeListener(this);
 	}
 	/** Initializes the spinner. */
 	private void initSpinner() {
@@ -246,20 +277,15 @@ implements OnClickListener, OnFocusChangeListener {
 		setDisplayPicture(prefs);
 		setInfoText(prefs);
 		setTimeDisplaySpinner(prefs);
+		
+		setPhoneNumber(prefs);
 	}
-	/** Sets the display picture enviroment based upon preference.
-	 * @param prefs The preference to check.
-	 */
-	private void setDisplayPicture(SharedPreferences prefs) {
-		Resources r = getResources();
-		isPictureSet = prefs.getBoolean(
-				r.getString(R.string.com_ovrhere_picwidget_pref_KEY_DISPLAY_PICTURE),
-				r.getBoolean(R.bool.com_ovrhere_picwidget_pref_DEF_VALUE_DISPLAY_PICTURE));
-		setDisplayImage();
-	}
+	
+	
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	/// Helper functions
 	////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	/**
 	 * Set's picture display based on existing file & the accompanying button.
 	 */
@@ -272,6 +298,34 @@ implements OnClickListener, OnFocusChangeListener {
 		if (btn_remove != null){
 			btn_remove.setEnabled(imgExists);
 		} 
+	}
+	
+	/** Sets the display picture enviroment based upon preference.
+	 * @param prefs The preference to check.
+	 */
+	private void setDisplayPicture(SharedPreferences prefs) {
+		Resources r = getResources();
+		isPictureSet = prefs.getBoolean(
+				r.getString(R.string.com_ovrhere_picwidget_pref_KEY_DISPLAY_PICTURE),
+				r.getBoolean(R.bool.com_ovrhere_picwidget_pref_DEF_VALUE_DISPLAY_PICTURE));
+		setDisplayImage();
+	}
+	
+	/** Sets the phone number and partner checkbox according to preference.
+	 * If there is value, checkbox is true, otherwise, it is set false.
+	 * @param prefs The prefs to use.
+	 */
+	private void setPhoneNumber(SharedPreferences prefs) {
+		String phone = prefs.getString(
+				getResources().getString(
+						R.string.com_ovrhere_picwidget_pref_KEY_CONTACT_PHONE_NUMBER),
+				"");
+		if (phone.trim().isEmpty()){
+			cb_allowPhone.setChecked(false);
+		} else {
+			cb_allowPhone.setChecked(true);
+			et_phoneNumber.setText(phone);
+		}
 	}
 	
 	/** Sets the info text based on preferences. 
@@ -314,6 +368,13 @@ implements OnClickListener, OnFocusChangeListener {
 										.trim()
 										//.replace("\n", "")
 				);
+		String phone = 	cb_allowPhone.isChecked() ? 
+						et_phoneNumber.getText().toString().trim() :  "";
+		
+		editor.putString(
+				r.getString(R.string.com_ovrhere_picwidget_pref_KEY_CONTACT_PHONE_NUMBER), 
+				phone);
+		
 		setTimeDisplayPreference(editor);
 		
 		editor.commit();
@@ -383,8 +444,18 @@ implements OnClickListener, OnFocusChangeListener {
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		if (!isChecked){
+			//if not allowed, clear text.
+			//et_phoneNumber.setText(""); //actually, let's not for now.
+		}
+		et_phoneNumber.setEnabled(isChecked);
+	}
+	
+	@Override
 	public void onFocusChange(View v, boolean hasFocus) {
 		switch (v.getId()){
+			case R.id.com_ovrhere_picwidget_activity_config_textin_phoneNum:
 			case R.id.com_ovrhere_picwidget_activity_config_textin_info:
 				if (!hasFocus){
 					hideKeyboard(v);

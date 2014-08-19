@@ -24,6 +24,10 @@
     <!-- The content description of the image. -->
     <string name="com_ovrhere_picwidget_contentDescrip_mainPicture"
         >A custom image set by the device owner</string>
+    <!-- The content description of the image. -->
+    <string name="com_ovrhere_picwidget_contentDescrip_callPicture"
+        >Phone icon</string>
+    
     <!--  The edit textview string. -->
     <string name="com_ovrhere_picwidget_text_edit">EDIT</string>    
     <!--  The Call textview string. -->
@@ -38,13 +42,25 @@
     <!-- String to use for remove picture button -->
     <string name="com_ovrhere_picwidget_button_removePicture" 
         >Clear Picture</string> 
+        
+    <!-- String to use for remove picture button -->
+    <string name="com_ovrhere_picwidget_check_phoneCheck" 
+        >I understand that by entering a phone number 
+        that it may be dialed without unlocking the device &amp; 
+        may cost me money whenever dialed.</string> 
 
+    <!-- Headings & hints -->
+    <eat-comment />
     <!-- Hint text to use for info box.-->
     <string name="com_ovrhere_picwidget_textin_infoBox" 
-        >Owner information&#8230;</string> 
-        
+        >Owner information&#8230;</string>
+     
+    <!-- Hint text to use for phone number.-->
+    <string name="com_ovrhere_picwidget_textin_phoneNumBox" 
+        >Phone number&#8230;</string>
+                
     <!-- String to use for time display options spinner label.-->
-    <string name="com_ovrhere_picwidget_text_timeOptions" 
+    <string name="com_ovrhere_picwidget_text_timeOptionsTitle" 
         >Time display:</string> 
     
     <!-- List of options for the widget -->

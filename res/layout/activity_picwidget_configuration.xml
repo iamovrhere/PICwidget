@@ -31,20 +31,19 @@
 	    android:focusableInTouchMode="true"
 	    android:clickable="true"
 	    >
-	<!-- 160 char limit == sms char limit.  -->
+	
 	    <EditText
 	        android:id="@+id/com_ovrhere_picwidget_activity_config_textin_info"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:layout_alignLeft="@+id/com_ovrhere_picwidget_activity_config_img_preview"
-	        android:layout_below="@+id/com_ovrhere_picwidget_activity_config_img_preview"
-	        android:layout_marginTop="30dp"
+	        android:layout_alignLeft="@+id/com_ovrhere_picwidget_activity_config_check_phoneAllow"
+	        android:layout_below="@+id/com_ovrhere_picwidget_activity_config_check_phoneAllow"
+	        android:layout_marginTop="20dp"
 	        android:ems="10"
 	        android:inputType="textMultiLine" 
 	        
 	        android:hint="@string/com_ovrhere_picwidget_textin_infoBox"
-	        
-	        android:maxLines="@integer/com_ovrhere_picwidget_activity_config_textin_info_lineLimit"
+
 	        android:maxLength="@integer/com_ovrhere_picwidget_activity_config_textin_info_charLimit"
 	        >
 	
@@ -70,6 +69,7 @@
 	        style="?android:attr/buttonBarStyle"
 	        android:layout_marginTop="20dp"
 	        android:layout_below="@+id/com_ovrhere_picwidget_activity_config_spinner_clockChoice"
+	        android:showDividers="middle"
 	        >
 	
 	        <Button
@@ -124,8 +124,39 @@
 	        android:layout_alignLeft="@+id/com_ovrhere_picwidget_activity_config_textin_info"
 	        android:layout_below="@+id/com_ovrhere_picwidget_activity_config_textin_info"
 	        android:layout_marginTop="24dp"
-	        android:text="@string/com_ovrhere_picwidget_text_timeOptions"
+	        android:text="@string/com_ovrhere_picwidget_text_timeOptionsTitle"
 	        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+	    <CheckBox
+	        android:id="@+id/com_ovrhere_picwidget_activity_config_check_phoneAllow"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="5dp"
+	        
+	        android:layout_alignLeft="@+id/com_ovrhere_picwidget_activity_config_textin_phoneNum"
+	        android:layout_below="@+id/com_ovrhere_picwidget_activity_config_textin_phoneNum"
+	        
+	        android:text="@string/com_ovrhere_picwidget_check_phoneCheck" 
+	        style="?android:attr/textAppearanceSmall"
+	        android:gravity="top|left"
+	        />
+	    
+	     <EditText
+	        android:id="@+id/com_ovrhere_picwidget_activity_config_textin_phoneNum"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        
+	        android:layout_alignLeft="@+id/com_ovrhere_picwidget_activity_config_img_preview"
+	        android:layout_below="@+id/com_ovrhere_picwidget_activity_config_img_preview"
+	        
+	        android:layout_marginTop="30dp"
+	        android:ems="10"
+	        android:inputType="phone" 
+	        
+	        android:hint="@string/com_ovrhere_picwidget_textin_phoneNumBox"
+
+	        android:maxLength="@integer/com_ovrhere_picwidget_activity_config_textin_info_charLimit"
+	        />
 	    
 	</RelativeLayout>        
 </ScrollView>
