@@ -27,7 +27,7 @@ import android.content.res.Resources;
  * Preference Utility for handling the preferences and the preference container.
  * Has ability to set defaults. Keeps widget preferences separate. 
  * @author Jason J.
- * @version 0.1.0-20140808
+ * @version 0.2.0-20140819
  */
 public class PreferenceUtils {
 	/* The class name. */
@@ -91,6 +91,11 @@ public class PreferenceUtils {
 		prefEdit.putBoolean(
 				r.getString(R.string.com_ovrhere_picwidget_pref_KEY_DISPLAY_PICTURE),
 				r.getBoolean(R.bool.com_ovrhere_picwidget_pref_DEF_VALUE_DISPLAY_PICTURE)
+				);
+		
+		prefEdit.putString(
+				r.getString(R.string.com_ovrhere_picwidget_pref_KEY_CONTACT_PHONE_NUMBER),
+				r.getString(R.string.com_ovrhere_picwidget_pref_DEF_VALUE_CONTACT_PHONE_NUMBER)
 				);
 		
 		prefEdit.putString(

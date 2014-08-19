@@ -15,7 +15,7 @@
    limitations under the License.
 -->
 <resources>
-    <!-- Version 0.1.0  -->
+    <!-- Version 0.2.0  -->
     <eat-comment />
     <!-- The string used as the preference file name. -->
     <string name="com_ovrhere_picwidget_PREFERENCE_FILE_KEY" >
@@ -30,6 +30,11 @@
 	<string name="com_ovrhere_picwidget_pref_KEY_DISPLAY_PICTURE"
 	    >com_ovrhere_picwidget_pref_KEY_DISPLAY_PICTURE</string>
 	
+	<!-- String key. Defines the content of the phone number to call. 
+	This may migrate to database in future. -->
+	<string name="com_ovrhere_picwidget_pref_KEY_CONTACT_PHONE_NUMBER"
+	    >com_ovrhere_picwidget_pref_KEY_CONTACT_PHONE_NUMBER</string>	
+	    
 	<!-- String key. Defines the content of the info box. 
 	This may migrate to database in future. Expects any string (please keep it under 500). -->
 	<string name="com_ovrhere_picwidget_pref_KEY_INFO_CONTENT"
@@ -57,6 +62,9 @@
         
 	<!-- String value. Default value for key: com_ovrhere_picwidget_pref_KEY_INFO_CONTENT.  -->
 	<string name="com_ovrhere_picwidget_pref_DEF_VALUE_INFO_CONTENT"></string>
+	
+	<!-- String value. Default value for key: com_ovrhere_picwidget_pref_KEY_PHONE_NUMBER.  -->
+	<string name="com_ovrhere_picwidget_pref_DEF_VALUE_CONTACT_PHONE_NUMBER"></string>
 	
 	<!-- Boolean key. Default value for key:com_ovrhere_picwidget_pref_KEY_DISPLAY_PICTURE. -->
 	<item name="com_ovrhere_picwidget_pref_DEF_VALUE_DISPLAY_PICTURE"
