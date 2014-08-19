@@ -33,13 +33,11 @@
         -->
 
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" 
-        android:paddingLeft="@dimen/com_ovrhere_picwidget_widget_item_padding"
-        android:paddingTop="@dimen/com_ovrhere_picwidget_widget_item_padding"  
-        android:paddingRight="@dimen/com_ovrhere_picwidget_widget_item_padding"      
-        android:paddingBottom="0dp"
+        android:layout_width="@dimen/com_ovrhere_picwidget_widget_img_mainPicture_width"
+        android:layout_height="match_parent" 
+        
         android:layout_gravity="center_vertical"
+        android:gravity="center"
         
         android:id="@+id/com_ovrhere_picwidget_widget_layout_imgContainer"
         android:background="@drawable/click_frame_bg_clickable_left"
@@ -49,8 +47,14 @@
         
         <ImageView
 	        android:id="@+id/com_ovrhere_picwidget_widget_img_mainPicture"
-	        android:layout_width="@dimen/com_ovrhere_picwidget_widget_img_mainPicture_width"
+	        android:layout_width="wrap_content"
 	        android:layout_height="@dimen/com_ovrhere_picwidget_widget_img_mainPicture_width"
+	        
+	        android:layout_marginLeft="@dimen/com_ovrhere_picwidget_widget_item_padding"
+	        android:layout_marginTop="@dimen/com_ovrhere_picwidget_widget_item_padding"  
+	        android:layout_marginRight="@dimen/com_ovrhere_picwidget_widget_item_padding"      
+	        android:layout_marginBottom="0dp"
+	        
 	        android:contentDescription="@string/com_ovrhere_picwidget_contentDescrip_mainPicture"
 	        android:scaleType="centerInside"
 	        android:src="@drawable/ic_no_picture"
@@ -62,6 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/com_ovrhere_picwidget_widget_img_mainPicture"
             android:layout_centerHorizontal="true"
+            
             android:layout_marginTop="-1dp"
             
             
@@ -107,6 +112,8 @@
 	        
 	        android:layout_width="wrap_content"
 	        android:layout_height="match_parent"
+	        android:minWidth="@dimen/com_ovhere_picwidget_widget_infoText_width_min"
+	        
 	        
 	        android:padding="@dimen/com_ovrhere_picwidget_widget_item_padding"
 	        android:layout_alignParentLeft="true"
