@@ -16,7 +16,9 @@
 -->
 <resources>
 	<!-- The name of the widget as it appears on the screen -->
-    <string name="app_name">Picture Info Widget</string>
+    <string name="app_name">Picture, Info, Call Widget</string>
+    <!-- The name of the config activity as appears in action bar -->
+    <string name="app_config_name">PIC Widget Configuration</string>
     <!-- The settings string -->
     <string name="action_settings">Settings</string>
     

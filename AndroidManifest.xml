@@ -35,7 +35,7 @@
         
         <activity
             android:name="com.ovrhere.android.picwidget.ui.PICWidgetConfigurationActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_config_name" >
             <intent-filter>
 		        <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
             </intent-filter>
