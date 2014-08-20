@@ -41,12 +41,12 @@
     <!-- Widget colors -->
     <eat-comment />
         
-    <!-- The gradient black used in the background center. Black 80%. -->
+    <!-- The gradient black used in the background center. Black 60% opacity. -->
     <color name="com_ovrhere_picwidget_bg_center"
-        >@color/com_ovrhere_picwidget_black_80</color>
-    <!-- The gradient grey used in the background edges. Black 10% opacity. -->
+        >#99080808</color>
+    <!-- The gradient grey used in the background edges. Black 40% opacity. -->
     <color name="com_ovrhere_picwidget_bg_edges" 
-        >#1A080808</color>
+        >#66080808</color>
     
     <!-- The gradient color for pressed widget's center. -->
     <color name="com_ovrhere_picwidget_bg_pressed_center"
