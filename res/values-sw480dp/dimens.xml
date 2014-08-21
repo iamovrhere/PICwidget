@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+   Copyright 2014 Jason J.
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<resources>
+	    
+    <!-- Widget internal -->
+    <eat-comment />
+    <!-- The square dimensions of the main picture of the widget. -->
+    <dimen name="com_ovrhere_picwidget_widget_img_mainPicture_width">72dp</dimen>
+    
+    <!-- The side padding for the internal widget. --> 
+    <!-- The primary item padding for elements in the widget -->
+    <dimen name="com_ovrhere_picwidget_widget_item_padding">7dp</dimen>
+    
+	<!-- The text size for the pic widget info. 
+	Dp is used INTENTIONALLY as this is a widget; we need a constant size.
+	Alternative sizes will need to supplied with dropdown eventually. -->
+    <dimen name="com_ovrhere_picwidget_widget_text_info_size">14dp</dimen>
+    
+    <!-- limits -->
+    <eat-comment/>
+    
+     <!-- The estimated widget text width per line minimally 
+    (picture + time enabled). -->
+    <dimen name="com_ovhere_picwidget_widget_infoText_width_min" 
+       >190dp</dimen>
+    <!-- The estimated widget text width per line middle value 
+    (picture enabled only). -->
+    <dimen name="com_ovhere_picwidget_widget_infoText_width_mid" 
+       >200dp</dimen>
+    <!-- The estimated widget text width per line max value 
+    (text only). -->
+    <dimen name="com_ovhere_picwidget_widget_infoText_width_max" 
+       >290dp</dimen>
+    
+</resources>
