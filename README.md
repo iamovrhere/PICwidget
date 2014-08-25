@@ -1,15 +1,17 @@
-#Picture Info Card Widget
+#Picture, Info, Call (PIC) Widget
 
-This widget is intended to be a simple utility to display on the home or lock screen:
+This widget is intended to be a simple utility which the user can use to display: 
 * Picture (e.g. the owner)
-* Device owner
 * Information about the device or owner
+* Call a number from the widget (either home or lock screen) [[Still experimental]]
+* Time
+on the home or lock screen.
 
 ###Notes
 
 The app supports **Android 4.0.3** and up. App is currently in the development stages, prior to testing.
 
-On devices **Android 4.2** and up the widget can be placed on the lock screen.
+On devices **Android 4.2** and up, the widget can be placed on the lock screen.
 
 This widget is in the *very* early stages of development.
 
