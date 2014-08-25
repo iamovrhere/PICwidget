@@ -20,6 +20,7 @@
     android:minResizeWidth="@dimen/com_ovrhere_picwidget_minResizeWidth"
     android:minResizeHeight="@dimen/com_ovrhere_picwidget_minResizeHeight"
     android:updatePeriodMillis="0"
+    android:previewImage="@drawable/ic_widget_preview"
     android:initialLayout="@layout/appwidget_loading_widget"
   	android:initialKeyguardLayout="@layout/appwidget_loading_widget"
     android:configure="com.ovrhere.android.picwidget.ui.PICWidgetConfigurationActivity" 

@@ -15,64 +15,65 @@
    limitations under the License.
 -->
 <resources>
-	<!-- The name of the widget as it appears on the screen -->
+
+    <!-- The name of the widget as it appears on the screen -->
     <string name="app_name">Picture, Info, Call Widget</string>
     <!-- The name of the config activity as appears in action bar -->
     <string name="app_config_name">PIC Widget Configuration</string>
     <!-- The settings string -->
     <string name="action_settings">Settings</string>
-    
-    
+    <!-- The main activity title -->
+    <string name="title_activity_main">PIC Widget: Main Launcher</string>
+    <!-- The content string for the launcher activity. -->
+    <string name="com_ovrhere_picwidget_main_text">Hello. Welcome to the 
+        Picture, Information, Call widget. \n\nRemember this is primarily a widget
+        and so settings are set when a widget is added. </string>
+
     <!-- The content description of the image. -->
-    <string name="com_ovrhere_picwidget_contentDescrip_mainPicture"
-        >A custom image set by the device owner</string>
+    <string name="com_ovrhere_picwidget_contentDescrip_mainPicture">A custom image set by the device owner</string>
     <!-- The content description of the image. -->
-    <string name="com_ovrhere_picwidget_contentDescrip_callPicture"
-        >Phone icon</string>
-    
-    <!--  The edit textview string. -->
-    <string name="com_ovrhere_picwidget_text_edit">EDIT</string>    
-    <!--  The Call textview string. -->
-    <string name="com_ovrhere_picwidget_text_call">CALL</string>    
-    <!--  The textview string for no string set. -->
+    <string name="com_ovrhere_picwidget_contentDescrip_callPicture">Phone icon</string>
+
+    <!-- The edit textview string. -->
+    <string name="com_ovrhere_picwidget_text_edit">EDIT</string>
+    <!-- The Call textview string. -->
+    <string name="com_ovrhere_picwidget_text_call">CALL</string>
+    <!-- The textview string for no string set. -->
     <string name="com_ovrhere_picwidget_text_noStringSet">No text set</string>
-    
-    
+
     <!-- String to use for the select picture button -->
-    <string name="com_ovrhere_picwidget_button_selectPicture" 
-        >Select Picture</string>
+    <string name="com_ovrhere_picwidget_button_selectPicture">Select Picture</string>
     <!-- String to use for remove picture button -->
-    <string name="com_ovrhere_picwidget_button_removePicture" 
-        >Clear Picture</string> 
-        
+    <string name="com_ovrhere_picwidget_button_removePicture">Clear Picture</string>
+
     <!-- String to use for remove picture button -->
-    <string name="com_ovrhere_picwidget_check_phoneCheck" 
-        >I understand that by entering a phone number 
+    <string name="com_ovrhere_picwidget_check_phoneCheck">I understand that by entering a phone number 
         that it may be dialed without unlocking the device &amp; 
-        may cost me money whenever dialed.</string> 
+        may cost me money whenever dialed.</string>
 
     <!-- Headings & hints -->
     <eat-comment />
-    <!-- Hint text to use for info box.-->
-    <string name="com_ovrhere_picwidget_textin_infoBox" 
-        >Owner information&#8230;</string>
-     
-    <!-- Hint text to use for phone number.-->
-    <string name="com_ovrhere_picwidget_textin_phoneNumBox" 
-        >Phone number&#8230;</string>
-                
-    <!-- String to use for time display options spinner label.-->
-    <string name="com_ovrhere_picwidget_text_timeOptionsTitle" 
-        >Time display:</string> 
-    
+    <!-- Hint text to use for info box. -->
+    <string name="com_ovrhere_picwidget_textin_infoBox">Owner information&#8230;</string>
+
+    <!-- Hint text to use for phone number. -->
+    <string name="com_ovrhere_picwidget_textin_phoneNumBox">Phone number&#8230;</string>
+
+    <!-- String to use for time display options spinner label. -->
+    <string name="com_ovrhere_picwidget_text_timeOptionsTitle">Time display:</string>
+
     <!-- List of options for the widget -->
     <string-array name="com_ovrhere_picwidget_spinner_timeOptions">
         <item>None</item>
         <item>Analog</item>
     </string-array>
 
-    <!-- The stub to use in combination with appwdigetid to name image
-    files. -->
-    <string name="com_ovrhere_picwidget_filename_imgStub"
-        >picwidget_picture_id</string>
+    <!--
+    The stub to use in combination with appwdigetid to name image
+    files.
+    -->
+    <string name="com_ovrhere_picwidget_filename_imgStub">picwidget_picture_id</string>
+    
+    <string name="hello_world">Hello world!</string>
+
 </resources>
