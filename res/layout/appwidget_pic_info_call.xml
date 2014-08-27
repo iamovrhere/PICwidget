@@ -117,7 +117,7 @@
 	        android:loopViews="true"
 	        android:flipInterval="@integer/com_ovrhere_picwidget_widget_viewAdapter_switchTime"
 	        
-	        android:layout_width="wrap_content"
+	        android:layout_width="match_parent"
 	        android:layout_height="match_parent"
 	        android:minWidth="@dimen/com_ovhere_picwidget_widget_infoText_width_min"
 	        
