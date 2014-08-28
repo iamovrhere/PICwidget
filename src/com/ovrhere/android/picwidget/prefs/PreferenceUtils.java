@@ -16,11 +16,11 @@
 package com.ovrhere.android.picwidget.prefs;
 
 
-import com.ovrhere.android.pictureinfocard.widget.R;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+
+import com.ovrhere.android.picwidget.R;
 
 /**
  * Branched from MorseFlash:

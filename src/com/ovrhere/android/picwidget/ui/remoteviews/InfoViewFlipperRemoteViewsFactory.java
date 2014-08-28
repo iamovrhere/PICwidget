@@ -26,7 +26,7 @@ import android.content.res.Resources;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService.RemoteViewsFactory;
 
-import com.ovrhere.android.pictureinfocard.widget.R;
+import com.ovrhere.android.picwidget.R;
 import com.ovrhere.android.picwidget.prefs.PreferenceUtils;
 import com.ovrhere.android.picwidget.utils.TextClipper;
 

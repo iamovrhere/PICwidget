@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.ovrhere.android.pictureinfocard.widget.R;
+import com.ovrhere.android.picwidget.R;
 
 public class MainActivity extends Activity {
 

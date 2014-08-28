@@ -46,7 +46,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
-import com.ovrhere.android.pictureinfocard.widget.R;
+import com.ovrhere.android.picwidget.R;
 import com.ovrhere.android.picwidget.prefs.PreferenceUtils;
 import com.ovrhere.android.picwidget.ui.provider.PICWidgetProvider;
 import com.ovrhere.android.picwidget.utils.BitmapUtil;

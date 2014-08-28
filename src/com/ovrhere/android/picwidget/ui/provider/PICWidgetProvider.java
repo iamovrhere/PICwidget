@@ -30,7 +30,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
-import com.ovrhere.android.pictureinfocard.widget.R;
+import com.ovrhere.android.picwidget.R;
 import com.ovrhere.android.picwidget.broadcastreceivers.ConfigurationBroadcastReceiver;
 import com.ovrhere.android.picwidget.prefs.PreferenceUtils;
 import com.ovrhere.android.picwidget.ui.PICWidgetConfigurationActivity;
