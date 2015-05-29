@@ -1,6 +1,6 @@
-[<img src="./screenshots/feature_graphic.png?raw=true" title="Get 'Picture, Info, Call Widget' on Google Play"  /> ](https://play.google.com/store/apps/details?id=com.ovrhere.android.picwidget)
+<img src="./screenshots/feature_graphic.png?raw=true" /> 
 
-#Picture, Info, Call (PIC) Widget [<span style=""><img src="./ic_launcher-web.png" title="Get 'Picture, Info, Call Widget' on Google Play" height="50" width="50" style="padding-right: 15px; padding-left: 15px;height: 50px;" /> <img src="./screenshots/get_on_play_45.png?raw=true" title="Get 'Picture, Info, Call Widget' on Google Play" /></span>](https://play.google.com/store/apps/details?id=com.ovrhere.android.picwidget)
+#Picture, Info, Call (PIC) Widget <img src="./ic_launcher-web.png?raw=true" title="'Picture, Info, Call Widget'" height="50" width="50" style="padding-right: 15px; padding-left: 15px;height: 50px;" /> 
 
 This widget is intended to be a simple utility which the user can use to display: 
 * Picture (e.g. the owner)
@@ -11,17 +11,17 @@ on the home or lock screen.
 
 ###Notes
 
-The app supports **Android 4.0.3** and up. App is currently an open beta pending new features and fixes, and can be found on [Google Play](https://play.google.com/store/apps/details?id=com.ovrhere.android.picwidget "Find 'Picture, Info, Call Widget' on Google Play"). 
+The app supports **Android 4.0.3** and up. App is currently an open beta pending new features and fixes, and no longer available on Google Play.
 
 On devices **Android 4.2** and up, the widget can be placed on the lock screen.
 
-This widget is in the early stages of development.
+This widget is in the early stages of development. 
 
 ###Screenshots
 <img src="./screenshots/picwidget_screenshot0.png?raw=true" title="Edited screen shot of widget on lock screen"  width="400"/> 
 
 
-<img src="./screenshots/picwidget_screenshot2.png?raw=true" title="Screen shot of configuration screen"  width="250"/>  <img src="./screenshots/picwidget_screenshot3.png?raw=true" title="Screen shot of two widgets on screen"  width="250"/>  
+<img src="./screenshots/picwidget_screenshot2.png?raw=true" title="Screen shot of configuration screen"  width="250"/>  <img src="./screenshots/picwidget_screenshot3.png?raw=true" title="Screen shot of two widgets on screen"  width="250"/> 
 
 
 #License
